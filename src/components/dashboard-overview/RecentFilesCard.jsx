@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import Icon from '../../components/AppIcon';
 import Image from '../../components/AppImage';
 
@@ -57,7 +57,7 @@ const RecentFilesCard = ({ files, className = "" }) => {
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold text-foreground">Recent Files</h2>
         <Link 
-          to="/files" 
+          href="/files" 
           className="text-sm text-primary hover:text-primary/80 transition-colors flex items-center space-x-1"
         >
           <span>View All</span>
@@ -135,7 +135,7 @@ const RecentFilesCard = ({ files, className = "" }) => {
               {files?.length} recent files
             </span>
             <Link 
-              to="/files"
+              href="/files"
               className="text-primary hover:text-primary/80 transition-colors"
             >
               Manage Files

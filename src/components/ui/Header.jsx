@@ -1,12 +1,12 @@
+'use client'
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import  Link  from 'next/link';
 import Icon from '../AppIcon';
 import Button from './Button';
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
-  const location = useLocation();
 
   const navigationItems = [
     {
@@ -54,9 +54,6 @@ const Header = () => {
     }
   ];
 
-  const isActiveRoute = (path) => {
-    return location?.pathname === path;
-  };
 
   const handleLogout = () => {
     // Logout logic here
@@ -80,7 +77,7 @@ const Header = () => {
     <header className="fixed top-0 left-0 right-0 z-50 bg-card border-b border-border shadow-resting">
       <div className="flex items-center justify-between h-16 px-4 lg:px-6">
         {/* Logo */}
-        <Link to="/dashboard-overview" className="flex items-center space-x-2 flex-shrink-0">
+        <Link href="/dashboard-overview" className="flex items-center space-x-2 flex-shrink-0">
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
             <Icon name="Wrench" size={20} color="white" />
           </div>
@@ -94,12 +91,8 @@ const Header = () => {
           {navigationItems?.map((item) => (
             <Link
               key={item?.path}
-              to={item?.path}
-              className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                isActiveRoute(item?.path)
-                  ? 'bg-primary text-primary-foreground'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-              }`}
+              href={item?.path}
+              className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors`}
             >
               <Icon name={item?.icon} size={16} />
               <span>{item?.label}</span>
@@ -145,7 +138,7 @@ const Header = () => {
                   {profileMenuItems?.map((item) => (
                     <Link
                       key={item?.path}
-                      to={item?.path}
+                      href={item?.path}
                       onClick={() => setIsProfileDropdownOpen(false)}
                       className="flex items-center space-x-2 px-3 py-2 text-sm text-foreground hover:bg-muted transition-colors"
                     >
@@ -174,13 +167,9 @@ const Header = () => {
             {navigationItems?.map((item) => (
               <Link
                 key={item?.path}
-                to={item?.path}
+                href={item?.path}
                 onClick={closeMobileMenu}
-                className={`flex items-center space-x-3 px-3 py-3 rounded-md text-base font-medium transition-colors ${
-                  isActiveRoute(item?.path)
-                    ? 'bg-primary text-primary-foreground'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                }`}
+                className={`flex items-center space-x-3 px-3 py-3 rounded-md text-base font-medium transition-colors`}
               >
                 <Icon name={item?.icon} size={20} />
                 <span>{item?.label}</span>

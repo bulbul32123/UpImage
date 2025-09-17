@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+"use client"
+import Link from 'next/link'
 import Icon from '../../components/AppIcon';
 
 const ToolCard = ({ tool }) => {
@@ -30,7 +31,7 @@ const ToolCard = ({ tool }) => {
 
   return (
     <Link
-      to={tool?.path}
+     href={tool?.path}
       className="group bg-card rounded-lg p-6 shadow-resting border border-border hover:shadow-elevated transition-all duration-200 hover:scale-[1.02] block"
     >
       <div className="flex items-start justify-between mb-4">

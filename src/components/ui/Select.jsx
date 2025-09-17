@@ -1,4 +1,4 @@
-// components/ui/Select.jsx - Shadcn style Select
+"use client"
 import React, { useState } from "react";
 import { ChevronDown, Check, Search, X } from "lucide-react";
 import { cn } from "../../utils/cn";
@@ -104,7 +104,7 @@ const Select = React.forwardRef(({
                 <label
                     htmlFor={selectId}
                     className={cn(
-                        "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block",
+                        "text-sm bg-red-700 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block",
                         error ? "text-destructive" : "text-foreground"
                     )}
                 >
@@ -118,7 +118,7 @@ const Select = React.forwardRef(({
                     id={selectId}
                     type="button"
                     className={cn(
-                        "flex h-10 w-full items-center justify-between rounded-md border border-input bg-white text-black px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+                        "flex h-10 w-full items-center justify-between rounded-md border border-input bg-red text-black px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
                         error && "border-destructive focus:ring-destructive",
                         !hasValue && "text-muted-foreground"
                     )}
@@ -198,8 +198,8 @@ const Select = React.forwardRef(({
                                     <div
                                         key={option?.value}
                                         className={cn(
-                                            "relative flex cursor-pointer select-none items-center rounded-sm px-3 py-2 text-sm outline-none hover:bg-accent hover:text-accent-foreground",
-                                            isSelected(option?.value) && "bg-primary text-primary-foreground",
+                                            "relative flex cursor-pointer select-none items-center rounded-sm px-3 py-2 text-sm outline-none",
+                                            isSelected(option?.value) && "bg-white text-black",
                                             option?.disabled && "pointer-events-none opacity-50"
                                         )}
                                         onClick={() => !option?.disabled && handleOptionSelect(option)}
@@ -207,11 +207,6 @@ const Select = React.forwardRef(({
                                         <span className="flex-1">{option?.label}</span>
                                         {multiple && isSelected(option?.value) && (
                                             <Check className="h-4 w-4" />
-                                        )}
-                                        {option?.description && (
-                                            <span className="text-xs text-muted-foreground ml-2">
-                                                {option?.description}
-                                            </span>
                                         )}
                                     </div>
                                 ))

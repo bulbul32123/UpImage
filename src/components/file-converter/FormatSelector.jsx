@@ -3,35 +3,26 @@ import React from 'react';
 import Icon from '../../components/AppIcon';
 import Select from '../../components/ui/Select';
 
-const FormatSelector = ({ 
-  sourceFormat, 
-  targetFormat, 
-  onSourceChange, 
-  onTargetChange, 
-  availableFormats,
-  className = "" 
+const FormatSelector = ({
+  sourceFormat,
+  targetFormat,
+  onSourceChange,
+  onTargetChange,
+  className = ""
 }) => {
-  const formats = availableFormats || [
-    { value: 'pdf', label: 'PDF Document', description: 'Portable Document Format' },
-    { value: 'docx', label: 'Word Document', description: 'Microsoft Word format' },
-    { value: 'txt', label: 'Text File', description: 'Plain text format' },
-    { value: 'doc', label: 'Word 97-2003', description: 'Legacy Word format' },
-    { value: 'rtf', label: 'Rich Text Format', description: 'Cross-platform text format' },
-    { value: 'odt', label: 'OpenDocument Text', description: 'Open standard format' },
-    { value: 'html', label: 'HTML Document', description: 'Web page format' },
-    { value: 'epub', label: 'EPUB eBook', description: 'Electronic publication format' }
+  const formats = [
+    { value: 'png', label: 'PNG' },
+    { value: 'jpg', label: 'JPG' },
+    { value: 'jpeg', label: 'JPEG' },
+    { value: 'webp', label: 'WEBP' },
   ];
 
   const getConversionSupport = (from, to) => {
     const supportMatrix = {
-      'pdf': ['docx', 'txt', 'html'],
-      'docx': ['pdf', 'txt', 'html', 'rtf', 'odt'],
-      'txt': ['pdf', 'docx', 'html', 'rtf'],
-      'doc': ['pdf', 'docx', 'txt', 'html', 'rtf'],
-      'rtf': ['pdf', 'docx', 'txt', 'html'],
-      'odt': ['pdf', 'docx', 'txt', 'html', 'rtf'],
-      'html': ['pdf', 'docx', 'txt'],
-      'epub': ['pdf', 'txt', 'html']
+      'png': ['jpg', 'webp', 'jpeg'],
+      'jpg': ['png', 'webp', 'jpeg'],
+      'webp': ['jpg', 'png', 'jpeg'],
+      'jpeg': ['png', 'webp', 'jpg'],
     };
 
     return supportMatrix?.[from]?.includes(to) || false;
@@ -39,26 +30,15 @@ const FormatSelector = ({
 
   const getAvailableTargets = () => {
     if (!sourceFormat) return formats;
-    
-    return formats?.filter(format => 
+
+    return formats?.filter(format =>
       format?.value !== sourceFormat && getConversionSupport(sourceFormat, format?.value)
     );
   };
 
-  const isConversionSupported = sourceFormat && targetFormat && getConversionSupport(sourceFormat, targetFormat);
-
   return (
     <div className={`space-y-6 ${className}`}>
-      {/* Format Selection Header */}
-      <div className="text-center">
-        <h3 className="text-lg font-semibold text-foreground mb-2">Choose Conversion Format</h3>
-        <p className="text-sm text-muted-foreground">
-          Select source and target formats for your file conversion
-        </p>
-      </div>
-      {/* Format Selection Controls */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-        {/* Source Format */}
         <div className="space-y-2">
           <label className="text-sm font-medium text-foreground">From</label>
           <Select
@@ -70,19 +50,16 @@ const FormatSelector = ({
           />
         </div>
 
-        {/* Conversion Arrow */}
         <div className="flex justify-center">
           <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-            <Icon 
-              name="ArrowRight" 
-              size={20} 
+            <Icon
+              name="ArrowRight"
+              size={20}
               color="var(--color-primary)"
               className="transform transition-transform hover:scale-110"
             />
           </div>
         </div>
-
-        {/* Target Format */}
         <div className="space-y-2">
           <label className="text-sm font-medium text-foreground">To</label>
           <Select
@@ -95,8 +72,20 @@ const FormatSelector = ({
           />
         </div>
       </div>
-      {/* Conversion Status */}
-      {sourceFormat && targetFormat && (
+    
+    </div>
+  );
+};
+
+export default FormatSelector;
+
+
+
+
+
+
+  {/* Conversion Status */}
+      {/* {sourceFormat && targetFormat && (
         <div className={`p-4 rounded-lg border ${
           isConversionSupported 
             ? 'bg-success/10 border-success/20' :'bg-error/10 border-error/20'
@@ -117,9 +106,9 @@ const FormatSelector = ({
             </span>
           </div>
         </div>
-      )}
+      )} */}
       {/* Popular Conversions */}
-      <div className="bg-card border border-border rounded-lg p-4">
+      {/* <div className="bg-card border border-border rounded-lg p-4">
         <h4 className="text-sm font-medium text-foreground mb-3">Popular Conversions</h4>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
           {[
@@ -143,9 +132,9 @@ const FormatSelector = ({
             </button>
           ))}
         </div>
-      </div>
+      </div> */}
       {/* Quality Settings */}
-      {isConversionSupported && (sourceFormat === 'pdf' || targetFormat === 'pdf') && (
+      {/* {isConversionSupported && (sourceFormat === 'pdf' || targetFormat === 'pdf') && (
         <div className="bg-muted/50 rounded-lg p-4 border border-border">
           <h4 className="text-sm font-medium text-foreground mb-3">Quality Settings</h4>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
@@ -163,9 +152,4 @@ const FormatSelector = ({
             ))}
           </div>
         </div>
-      )}
-    </div>
-  );
-};
-
-export default FormatSelector;
+      )} */}

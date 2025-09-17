@@ -8,20 +8,20 @@ const FileUploadZone = ({ onFilesSelected, acceptedFormats, maxFileSize, classNa
   const [uploadError, setUploadError] = useState('');
   const fileInputRef = useRef(null);
 
-  const supportedFormats = acceptedFormats || ['.docx', '.pdf', '.txt', '.doc', '.rtf', '.odt'];
+  const supportedFormats = acceptedFormats;
   const maxSize = maxFileSize || 50; // MB
 
   const validateFile = (file) => {
     const fileExtension = '.' + file?.name?.split('.')?.pop()?.toLowerCase();
-    
+
     if (!supportedFormats?.includes(fileExtension)) {
       return `Unsupported format. Supported: ${supportedFormats?.join(', ')}`;
     }
-    
+
     if (file?.size > maxSize * 1024 * 1024) {
       return `File too large. Maximum size: ${maxSize}MB`;
     }
-    
+
     return null;
   };
 
@@ -39,13 +39,15 @@ const FileUploadZone = ({ onFilesSelected, acceptedFormats, maxFileSize, classNa
     e?.preventDefault();
     setIsDragOver(false);
     setUploadError('');
-    
+
     const files = Array.from(e?.dataTransfer?.files);
     processFiles(files);
   };
 
   const handleFileSelect = (e) => {
     const files = Array.from(e?.target?.files);
+    console.log("files details: ", files);
+
     processFiles(files);
   };
 
@@ -89,11 +91,10 @@ const FileUploadZone = ({ onFilesSelected, acceptedFormats, maxFileSize, classNa
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        className={`relative border-2 border-dashed rounded-lg p-8 text-center transition-all duration-200 ${
-          isDragOver
-            ? 'border-primary bg-primary/5 scale-[1.02]'
-            : 'border-border bg-card hover:border-primary/50 hover:bg-muted/30'
-        }`}
+        className={`relative border-2 border-dashed rounded-lg p-8 text-center transition-all duration-200 ${isDragOver
+          ? 'border-primary bg-primary/5 scale-[1.02]'
+          : 'border-border bg-card hover:border-primary/50 hover:bg-muted/30'
+          }`}
       >
         <input
           ref={fileInputRef}
@@ -106,9 +107,8 @@ const FileUploadZone = ({ onFilesSelected, acceptedFormats, maxFileSize, classNa
 
         <div className="space-y-4">
           <div className="flex justify-center">
-            <div className={`w-16 h-16 rounded-full flex items-center justify-center transition-colors ${
-              isDragOver ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
-            }`}>
+            <div className={`w-16 h-16 rounded-full flex items-center justify-center transition-colors ${isDragOver ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
+              }`}>
               <Icon name="Upload" size={32} />
             </div>
           </div>
@@ -140,7 +140,7 @@ const FileUploadZone = ({ onFilesSelected, acceptedFormats, maxFileSize, classNa
         )}
       </div>
       {/* Format Information */}
-      <div className="bg-muted/50 rounded-lg p-4 border border-border">
+      {/* <div className="bg-muted/50 rounded-lg p-4 border border-border">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <h4 className="text-sm font-medium text-foreground mb-2">Supported Formats</h4>
@@ -164,7 +164,7 @@ const FileUploadZone = ({ onFilesSelected, acceptedFormats, maxFileSize, classNa
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
       {/* Error Display */}
       {uploadError && (
         <div className="bg-error/10 border border-error/20 rounded-lg p-4">

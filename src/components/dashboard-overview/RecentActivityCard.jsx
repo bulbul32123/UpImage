@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link'
 import Icon from '../../components/AppIcon';
 
 const RecentActivityCard = ({ activities, className = "" }) => {
@@ -52,7 +52,7 @@ const RecentActivityCard = ({ activities, className = "" }) => {
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold text-foreground">Recent Activity</h2>
         <Link 
-          to="/activity" 
+          href="/activity" 
           className="text-sm text-primary hover:text-primary/80 transition-colors flex items-center space-x-1"
         >
           <span>View All</span>

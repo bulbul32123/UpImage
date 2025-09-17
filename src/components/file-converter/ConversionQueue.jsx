@@ -1,15 +1,15 @@
 "use client"
 import React, { useState, useEffect } from 'react';
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
 import Icon from '../../components/AppIcon';
 import Button from '../../components/ui/Button';
 
-const ConversionQueue = ({ 
-  files, 
-  sourceFormat, 
-  targetFormat, 
-  onConversionComplete, 
+const ConversionQueue = ({
+  files,
   onRemoveFile,
-  className = "" 
+  sourceFormat,
+  className = ""
 }) => {
   const [conversionStates, setConversionStates] = useState({});
   const [isProcessing, setIsProcessing] = useState(false);
@@ -20,76 +20,123 @@ const ConversionQueue = ({
     files?.forEach(file => {
       if (!conversionStates?.[file?.id]) {
         newStates[file.id] = {
-          status: 'pending', // pending, converting, completed, error
+          status: 'pending',
           progress: 0,
           error: null,
           estimatedTime: null,
-          downloadUrl: null
+          downloadUrl: null,
+          targetFormat: 'png' // Default target format for each file
         };
       }
     });
-    
+
     if (Object.keys(newStates)?.length > 0) {
       setConversionStates(prev => ({ ...prev, ...newStates }));
     }
   }, [files]);
 
-  const simulateConversion = async (fileId) => {
+  const handleDownloadAll = async () => {
+    const zip = new JSZip();
+
+    for (const file of completedFiles) {
+      const state = conversionStates[file.id];
+      if (state?.downloadUrl) {
+        const response = await fetch(state.downloadUrl);
+        const blob = await response.blob();
+
+        const baseName = file?.name.replace(/\.[^/.]+$/, "");
+        const targetFormat = state.targetFormat;
+        zip.file(`${baseName}-bytoolsuitepro.${targetFormat}`, blob);
+      }
+    }
+
+    const content = await zip.generateAsync({ type: "blob" });
+    saveAs(content, "converted-files.zip");
+  };
+
+  const convertFile = async (fileId, fileObj) => {
+    const state = conversionStates[fileId];
+    const selectedFormat = state?.targetFormat;
+
+    if (!selectedFormat) {
+      console.error('No target format selected for file:', fileId);
+      return;
+    }
+
     const updateState = (updates) => {
-      setConversionStates(prev => ({
+      setConversionStates((prev) => ({
         ...prev,
-        [fileId]: { ...prev?.[fileId], ...updates }
+        [fileId]: { ...prev?.[fileId], ...updates },
       }));
     };
 
-    // Start conversion
-    updateState({ 
-      status: 'converting', 
-      progress: 0,
-      estimatedTime: Math.floor(Math.random() * 30) + 10 // 10-40 seconds
-    });
+    try {
+      updateState({ status: "converting", progress: 0 });
 
-    // Simulate progress
-    for (let progress = 0; progress <= 100; progress += Math.random() * 15) {
-      await new Promise(resolve => setTimeout(resolve, 200));
-      updateState({ progress: Math.min(progress, 100) });
-    }
+      const formData = new FormData();
+      formData.append("file", fileObj.file);
+      formData.append("targetFormat", selectedFormat);
 
-    // Simulate completion or error
-    const success = Math.random() > 0.1; // 90% success rate
-    
-    if (success) {
-      updateState({ 
-        status: 'completed', 
-        progress: 100,
-        downloadUrl: `#download-${fileId}` // Mock download URL
+      const res = await fetch("/api/convert", {
+        method: "POST",
+        body: formData,
       });
-      onConversionComplete?.(fileId);
-    } else {
-      updateState({ 
-        status: 'error', 
-        error: 'Conversion failed. The file may be corrupted or in an unsupported format.'
+
+      if (!res.ok) throw new Error("Conversion failed");
+
+      const blob = await res.blob();
+      const downloadUrl = URL.createObjectURL(blob);
+
+      updateState({
+        status: "completed",
+        progress: 100,
+        downloadUrl,
+      });
+    } catch (error) {
+      updateState({
+        status: "error",
+        error: error.message || "Conversion failed",
       });
     }
   };
 
   const handleStartConversion = async () => {
-    if (!sourceFormat || !targetFormat) return;
-    
+    if (!sourceFormat) return;
+
+    // Check if all files have target formats selected
+    const filesWithoutFormat = files.filter(file =>
+      !conversionStates[file.id]?.targetFormat
+    );
+
+    if (filesWithoutFormat.length > 0) {
+      alert('Please select target formats for all files before starting conversion.');
+      return;
+    }
+
     setIsProcessing(true);
-    
-    // Process files sequentially for demo purposes
+
+    // Process files sequentially
     for (const file of files) {
-      if (conversionStates?.[file?.id]?.status === 'pending') {
-        await simulateConversion(file?.id);
+      if (conversionStates?.[file?.id]?.status === "pending") {
+        await convertFile(file.id, file);
       }
     }
-    
+
     setIsProcessing(false);
   };
 
   const handleRetryConversion = (fileId) => {
-    simulateConversion(fileId);
+    convertFile(fileId, files.find(f => f.id === fileId));
+  };
+
+  const handleFormatChange = (fileId, newFormat) => {
+    setConversionStates(prev => ({
+      ...prev,
+      [fileId]: {
+        ...prev[fileId],
+        targetFormat: newFormat
+      }
+    }));
   };
 
   const getStatusIcon = (status) => {
@@ -136,7 +183,9 @@ const ConversionQueue = ({
   if (files?.length === 0) return null;
 
   const completedFiles = files?.filter(file => conversionStates?.[file?.id]?.status === 'completed');
-  const canStartConversion = sourceFormat && targetFormat && !isProcessing;
+  const canStartConversion = sourceFormat && files.every(file =>
+    conversionStates[file.id]?.targetFormat
+  );
 
   return (
     <div className={`space-y-6 ${className}`}>
@@ -144,11 +193,19 @@ const ConversionQueue = ({
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-lg font-semibold text-foreground">Conversion Queue</h3>
+          <p className='mb-4 text-xs'>Select target format for each file individually or use quick actions</p>
           <p className="text-sm text-muted-foreground">
             {files?.length} file{files?.length !== 1 ? 's' : ''} ready for conversion
+            {files.length > 0 &&
+              files.every(file => conversionStates[file.id]?.targetFormat === conversionStates[files[0].id]?.targetFormat) && (
+                <span className="ml-2 px-2 py-1 bg-primary/10 text-primary rounded-md text-xs">
+                  Quick Action: Converting to {conversionStates[files[0].id]?.targetFormat?.toUpperCase()}
+                </span>
+              )}
           </p>
+
         </div>
-        
+
         {files?.length > 0 && (
           <Button
             variant="default"
@@ -162,37 +219,20 @@ const ConversionQueue = ({
           </Button>
         )}
       </div>
-      {/* Conversion Format Display */}
-      {sourceFormat && targetFormat && (
-        <div className="bg-card border border-border rounded-lg p-4">
-          <div className="flex items-center justify-center space-x-4">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-muted rounded-lg flex items-center justify-center">
-                <span className="text-xs font-medium text-foreground">
-                  {sourceFormat?.toUpperCase()}
-                </span>
-              </div>
-            </div>
-            <Icon name="ArrowRight" size={20} color="var(--color-primary)" />
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-xs font-medium text-primary-foreground">
-                  {targetFormat?.toUpperCase()}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+
       {/* File Queue */}
       <div className="space-y-3">
         {files?.map(file => {
-          const state = conversionStates?.[file?.id] || { status: 'pending', progress: 0 };
-          
+          const state = conversionStates?.[file?.id] || {
+            status: 'pending',
+            progress: 0,
+            targetFormat: 'png'
+          };
+
           return (
             <div key={file?.id} className="bg-card border border-border rounded-lg p-4">
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center space-x-3 flex-1 min-w-0">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center space-x-3 min-w-0">
                   <div className="flex-shrink-0">
                     {getStatusIcon(state?.status)}
                   </div>
@@ -205,14 +245,59 @@ const ConversionQueue = ({
                     </p>
                   </div>
                 </div>
-                
+
+                {/* Format conversion display */}
+                {sourceFormat && state.targetFormat && (
+                  <div className="bg-card border border-border rounded-lg p-2 mx-4">
+                    <div className="flex items-center justify-center space-x-4">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-8 h-8 bg-muted rounded-lg flex items-center justify-center">
+                          <span className="text-xs text-foreground">
+                            {sourceFormat?.toUpperCase()}
+                          </span>
+                        </div>
+                      </div>
+                      <Icon name="ArrowRight" size={20} color="var(--color-primary)" />
+                      <div className="flex items-center space-x-3">
+                        <div className="w-full p-1 h-8 bg-primary rounded-lg flex items-center justify-center">
+                          <span className="text-xs text-primary-foreground">
+                            {state.targetFormat?.toUpperCase()}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Individual format selector */}
+                <select
+                  value={state.targetFormat || ''}
+                  onChange={(e) => handleFormatChange(file.id, e.target.value)}
+                  className="border rounded px-2 py-1 text-sm mr-2"
+                  disabled={state.status === 'converting'}
+                >
+                  <option value="">Select format</option>
+                  <option value="png">PNG</option>
+                  <option value="jpg">JPG</option>
+                  <option value="jpeg">JPEG</option>
+                  <option value="webp">WEBP</option>
+                </select>
+
                 <div className="flex items-center space-x-2 flex-shrink-0">
                   {state?.status === 'completed' && (
                     <Button
                       variant="outline"
                       size="sm"
                       iconName="Download"
-                      onClick={() => window.open(state?.downloadUrl, '_blank')}
+                      onClick={() => {
+                        const baseName = file?.name.replace(/\.[^/.]+$/, "");
+                        const link = document.createElement("a");
+                        link.href = state.downloadUrl;
+                        link.download = `${baseName}-bytoolsuitepro.${state.targetFormat}`;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                      }}
                     >
                       Download
                     </Button>
@@ -237,6 +322,7 @@ const ConversionQueue = ({
                   </Button>
                 </div>
               </div>
+
               {/* Progress Bar */}
               {(state?.status === 'converting' || state?.status === 'completed') && (
                 <div className="mb-2">
@@ -250,7 +336,7 @@ const ConversionQueue = ({
                       </span>
                     )}
                   </div>
-                  
+
                   <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
                     <div
                       className={`h-full transition-all duration-300 ease-out ${getStatusColor(state?.status)}`}
@@ -259,6 +345,7 @@ const ConversionQueue = ({
                   </div>
                 </div>
               )}
+
               {/* Error Message */}
               {state?.status === 'error' && state?.error && (
                 <div className="flex items-start space-x-2 p-2 bg-error/10 border border-error/20 rounded text-xs text-error">
@@ -270,6 +357,7 @@ const ConversionQueue = ({
           );
         })}
       </div>
+
       {/* Batch Download */}
       {completedFiles?.length > 1 && (
         <div className="bg-success/10 border border-success/20 rounded-lg p-4">
@@ -284,6 +372,7 @@ const ConversionQueue = ({
               variant="outline"
               size="sm"
               iconName="Download"
+              onClick={handleDownloadAll}
               className="border-success text-success hover:bg-success hover:text-success-foreground"
             >
               Download All (ZIP)
