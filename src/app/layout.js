@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "UpImage - Built for designers, marketers, and everyday creators who want fast, professional results without technical hassle.",
   description: `UpImage is an all-in-one AI-powered platform for image and document enhancement.
-From background removal and image restoration to AI generation and PDF summarization, UpImage gives you powerful creative tools in one seamless workspace`,
+From background removal and image restoration to AI generation and PDF summarization, UpImage gives you powerful creative tools in one seamless workspace.`,
 };
 
 export default function RootLayout({ children }) {
