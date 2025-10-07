@@ -30,8 +30,6 @@ const AccountDetailsTab = ({ user: initialUser }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-
-  // Initialize form data when user prop changes
   useEffect(() => {
     if (initialUser) {
       setFormData({
@@ -60,14 +58,11 @@ const AccountDetailsTab = ({ user: initialUser }) => {
   const handleImageUpload = async (event) => {
     const file = event?.target?.files?.[0];
     if (!file) return;
-
-    // Validate file size (5MB)
     if (file.size > 5 * 1024 * 1024) {
       setError('File size must be less than 5MB');
       return;
     }
 
-    // Validate file type
     if (!file.type.startsWith('image/')) {
       setError('Please upload an image file');
       return;
@@ -113,7 +108,6 @@ const AccountDetailsTab = ({ user: initialUser }) => {
         email: formData.email,
         profileImage: formData.profileImage,
       });
-      console.log("response2: ", response);
 
       if (response.data.success) {
         const updatedUser = response.data.data;
@@ -123,7 +117,6 @@ const AccountDetailsTab = ({ user: initialUser }) => {
           email: updatedUser.email,
           profileImage: updatedUser.profileImage,
         });
-        console.log("formData: ", formData);
 
         setSuccess('Profile updated successfully!');
         setIsEditing(false);
@@ -141,7 +134,6 @@ const AccountDetailsTab = ({ user: initialUser }) => {
 
 
   const handleCancel = () => {
-    // Reset form to initial values
     if (initialUser) {
       setFormData({
         name: initialUser.name || '',
@@ -156,7 +148,6 @@ const AccountDetailsTab = ({ user: initialUser }) => {
 
   return (
     <div className="space-y-8">
-      {/* Success/Error Messages */}
       {success && (
         <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-start space-x-3">
           <Icon name="CheckCircle" size={20} color="green" />
@@ -171,7 +162,6 @@ const AccountDetailsTab = ({ user: initialUser }) => {
         </div>
       )}
 
-      {/* Profile Picture Section */}
       <div className="bg-card rounded-lg p-6 border border-border shadow-resting">
         <h3 className="text-lg font-semibold text-foreground mb-4">Profile Picture</h3>
         <div className="flex items-center space-x-6">
