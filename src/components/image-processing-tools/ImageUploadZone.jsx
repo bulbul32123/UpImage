@@ -3,7 +3,7 @@ import React, { useState, useRef } from 'react';
 import Icon from '../../components/AppIcon';
 import Button from '../../components/ui/Button';
 
-const ImageUploadZone = ({ onFilesSelected, acceptedFormats, maxFileSize, isProcessing }) => {
+const ImageUploadZone = ({ onFilesSelected, acceptedFormats, maxFileSize, isProcessing, multiple }) => {
   const [isDragOver, setIsDragOver] = useState(false);
   const fileInputRef = useRef(null);
 
@@ -20,7 +20,7 @@ const ImageUploadZone = ({ onFilesSelected, acceptedFormats, maxFileSize, isProc
   const handleDrop = (e) => {
     e?.preventDefault();
     setIsDragOver(false);
-    
+
     const files = Array.from(e?.dataTransfer?.files);
     const validFiles = files?.filter(file => {
       const isValidFormat = acceptedFormats?.includes(file?.type);
@@ -66,12 +66,11 @@ const ImageUploadZone = ({ onFilesSelected, acceptedFormats, maxFileSize, isProc
   return (
     <div className="w-full">
       <div
-        className={`relative border-2 border-dashed rounded-lg p-8 text-center transition-all duration-200 ${
-          isDragOver
+        className={`relative border-2 border-dashed rounded-lg p-8 text-center transition-all duration-200 ${isDragOver
             ? 'border-primary bg-primary/5 scale-[1.02]'
             : isProcessing
-            ? 'border-muted bg-muted/20' :'border-border bg-card hover:border-primary/50 hover:bg-primary/5'
-        }`}
+              ? 'border-muted bg-muted/20' : 'border-border bg-card hover:border-primary/50 hover:bg-primary/5'
+          }`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
@@ -79,7 +78,7 @@ const ImageUploadZone = ({ onFilesSelected, acceptedFormats, maxFileSize, isProc
         <input
           ref={fileInputRef}
           type="file"
-          multiple
+          multiple={multiple}
           accept={acceptedFormats?.join(',')}
           onChange={handleFileSelect}
           className="hidden"
@@ -87,11 +86,10 @@ const ImageUploadZone = ({ onFilesSelected, acceptedFormats, maxFileSize, isProc
         />
 
         <div className="flex flex-col items-center space-y-4">
-          <div className={`w-16 h-16 rounded-full flex items-center justify-center transition-colors ${
-            isDragOver ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
-          }`}>
-            <Icon 
-              name={isDragOver ? 'Upload' : 'Image'} 
+          <div className={`w-16 h-16 rounded-full flex items-center justify-center transition-colors ${isDragOver ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
+            }`}>
+            <Icon
+              name={isDragOver ? 'Upload' : 'Image'}
               size={32}
               className={isDragOver ? 'animate-bounce' : ''}
             />

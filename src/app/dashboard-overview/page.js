@@ -1,6 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet';
+import React, { useState } from 'react';
 import WelcomeBanner from '../../components/dashboard-overview/WelcomeBanner';
 import ToolCard from '../../components/dashboard-overview/ToolCard';
 import QuickStatsCard from '../../components/dashboard-overview/QuickStatsCard';
@@ -24,26 +23,26 @@ const DashboardOverview = () => {
   });
 
   const [tools] = useState([
-    {
-      title: 'Image Processing Tools',
-      description: 'Background removal, enhancement, composition, and format conversion with AI-powered precision',
-      path: '/image-processing-tools',
-      icon: 'Image',
-      color: 'bg-accent',
-      status: 'active',
-      stats: {
-        count: '1,234',
-        label: 'Images Processed'
-      },
-      features: [
-        'AI Background Removal',
-        'Image Enhancement',
-        'Format Conversion',
-        'Batch Processing',
-        'Quality Optimization',
-        'Watermark Removal'
-      ]
-    },
+    // {
+    //   title: 'Image Processing Tools',
+    //   description: 'Background removal, enhancement, composition, and format conversion with AI-powered precision',
+    //   path: '/image-processing-tools',
+    //   icon: 'Image',
+    //   color: 'bg-accent',
+    //   status: 'active',
+    //   stats: {
+    //     count: '1,234',
+    //     label: 'Images Processed'
+    //   },
+    //   features: [
+    //     'AI Background Removal',
+    //     'Image Enhancement',
+    //     'Format Conversion',
+    //     'Batch Processing',
+    //     'Quality Optimization',
+    //     'Watermark Removal'
+    //   ]
+    // },
     {
       title: 'PDF Management Hub',
       description: 'Chat with PDFs, summarization, and comprehensive file management with intelligent document analysis',
@@ -225,14 +224,10 @@ const DashboardOverview = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>Dashboard Overview - ToolSuite Pro</title>
-        <meta name="description" content="Access all your AI-powered file processing tools and monitor usage analytics from your central dashboard." />
-      </Helmet>
       <div className="pt-20 pb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Welcome Banner */}
-          <WelcomeBanner user={user} />
+          {/* <WelcomeBanner user={user} /> */}
 
           {/* Tool Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
@@ -243,7 +238,7 @@ const DashboardOverview = () => {
 
           {/* Stats and Activity Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-            <QuickStatsCard 
+            {/* <QuickStatsCard 
               title="Quick Stats" 
               stats={quickStats}
               className="lg:col-span-1"
@@ -251,17 +246,17 @@ const DashboardOverview = () => {
             <RecentActivityCard 
               activities={recentActivity}
               className="lg:col-span-2"
-            />
+            /> */}
           </div>
 
           {/* Files and Analytics Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             <RecentFilesCard files={recentFiles} />
             <UsageAnalyticsCard analyticsData={analyticsData} />
-          </div>
+          </div> */}
 
           {/* Additional Info Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="bg-card rounded-lg p-6 shadow-resting border border-border">
               <div className="flex items-center space-x-3 mb-4">
                 <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
@@ -339,7 +334,7 @@ const DashboardOverview = () => {
                 </li>
               </ul>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

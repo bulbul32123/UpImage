@@ -1,13 +1,14 @@
 'use client'
 import React, { useState } from 'react';
-import  Link  from 'next/link';
+import Link from 'next/link';
 import Icon from '../AppIcon';
 import Button from './Button';
+import { useAuth } from '@/context/AuthContext';
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
-
+  const { user, signOut, loading } = useAuth();
   const navigationItems = [
     {
       label: 'Dashboard',
@@ -16,7 +17,7 @@ const Header = () => {
     },
     {
       label: 'Image Tools',
-      path: '/image-processing-tools',
+      path: '/image-tools',
       icon: 'Image'
     },
     {
@@ -53,10 +54,12 @@ const Header = () => {
       icon: 'HelpCircle'
     }
   ];
+  console.log(user);
+
 
 
   const handleLogout = () => {
-    // Logout logic here
+    signOut()
     console.log('Logging out...');
     setIsProfileDropdownOpen(false);
   };
@@ -115,24 +118,38 @@ const Header = () => {
 
           {/* Profile Dropdown */}
           <div className="relative">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleProfileDropdown}
-              className="rounded-full"
-              aria-label="User menu"
-            >
-              <div className="w-8 h-8 bg-secondary rounded-full flex items-center justify-center">
-                <Icon name="User" size={16} color="white" />
-              </div>
-            </Button>
+            {loading ? (
+              <div className="w-8 h-8 bg-gray-300 rounded-full animate-pulse" />
+            ) : user ? (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleProfileDropdown}
+                className="rounded-full"
+                aria-label="User menu"
+              >
+                <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
+                  <Icon name="User" size={16} color="white" />
+                </div>
+              </Button>
+            ) : (
+              <Link
+                href="/auth/signin"
+                className="rounded-full"
+                aria-label="Sign in"
+              >
+                <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
+                  <Icon name="User" size={16} color="white" />
+                </div>
+              </Link>
+            )}
 
             {/* Profile Dropdown Menu */}
-            {isProfileDropdownOpen && (
+            {isProfileDropdownOpen && user && (
               <div className="absolute right-0 mt-2 w-56 bg-popover border border-border rounded-lg shadow-floating z-60">
                 <div className="p-3 border-b border-border">
-                  <p className="text-sm font-medium text-foreground">John Doe</p>
-                  <p className="text-xs text-muted-foreground">john@example.com</p>
+                  <p className="text-sm font-medium text-black">{user?.name}</p>
+                  <p className="text-xs text-gray-600">{user?.email}</p>
                 </div>
                 <div className="py-1">
                   {profileMenuItems?.map((item) => (

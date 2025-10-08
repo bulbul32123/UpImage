@@ -83,15 +83,6 @@ const ImagePreviewArea = ({ originalImage, processedImage, isProcessing, onDownl
           {processedImage && (
             <>
               <Button
-                variant="outline"
-                size="sm"
-                onClick={onFullScreen}
-                iconName="Maximize2"
-                iconPosition="left"
-              >
-                Full Screen
-              </Button>
-              <Button
                 variant="default"
                 size="sm"
                 onClick={onDownload}

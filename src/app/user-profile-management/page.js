@@ -1,15 +1,16 @@
 "use client"
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 import Icon from '../../components/AppIcon';
 import AccountDetailsTab from '../../components/user-profile-management/AccountDetailsTab';
 import SubscriptionTab from '../../components/user-profile-management/SubscriptionTab';
 import UsageAnalyticsTab from '../../components/user-profile-management/UsageAnalyticsTab';
 import SecurityTab from '../../components/user-profile-management/SecurityTab';
+import { useAuth } from '@/context/AuthContext';
 
 const UserProfileManagement = () => {
   const [activeTab, setActiveTab] = useState('account');
-
+  const { user, loading } = useAuth();
   const tabs = [
     {
       id: 'account',
@@ -38,7 +39,6 @@ const UserProfileManagement = () => {
   ];
 
   const ActiveComponent = tabs?.find(tab => tab?.id === activeTab)?.component;
-
   return (
     <div className="min-h-screen bg-background">
       {/* Header with Breadcrumb */}
@@ -48,7 +48,7 @@ const UserProfileManagement = () => {
             {/* Breadcrumb */}
             <nav className="flex items-center space-x-2 text-sm">
               <Link
-                to="/dashboard-overview"
+                href="/dashboard-overview"
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
                 Dashboard
@@ -59,7 +59,7 @@ const UserProfileManagement = () => {
 
             {/* Quick Actions */}
             <div className="flex items-center space-x-3">
-              <Link to="/dashboard-overview">
+              <Link href="/dashboard-overview">
                 <button className="flex items-center space-x-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
                   <Icon name="ArrowLeft" size={16} />
                   <span className="hidden sm:inline">Back to Dashboard</span>
@@ -79,7 +79,7 @@ const UserProfileManagement = () => {
                   <Icon name="User" size={24} color="white" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-semibold text-foreground">John Doe</h2>
+                  <h2 className="text-lg font-semibold text-foreground">{user?.name}</h2>
                   <p className="text-sm text-muted-foreground">Pro Plan</p>
                 </div>
               </div>
@@ -90,8 +90,8 @@ const UserProfileManagement = () => {
                     key={tab?.id}
                     onClick={() => setActiveTab(tab?.id)}
                     className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-left transition-colors ${activeTab === tab?.id
-                        ? 'bg-primary text-primary-foreground'
-                        : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                       }`}
                   >
                     <Icon
@@ -136,8 +136,8 @@ const UserProfileManagement = () => {
                       key={tab?.id}
                       onClick={() => setActiveTab(tab?.id)}
                       className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium whitespace-nowrap transition-colors ${activeTab === tab?.id
-                          ? 'bg-primary text-primary-foreground'
-                          : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                        ? 'bg-primary text-primary-foreground'
+                        : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                         }`}
                     >
                       <Icon
@@ -179,7 +179,7 @@ const UserProfileManagement = () => {
               </div>
 
               {/* Dynamic Tab Content */}
-              {ActiveComponent && <ActiveComponent />}
+              {ActiveComponent && <ActiveComponent user={user} />}
             </div>
           </div>
         </div>

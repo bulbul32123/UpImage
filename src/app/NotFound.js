@@ -1,14 +1,10 @@
 'use client'
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import Button from '../components/ui/Button';
 import Icon from '../components/AppIcon';
 
 const NotFound = () => {
-  const navigate = useNavigate();
 
   const handleGoHome = () => {
-    navigate('/');
   };
 
   return (

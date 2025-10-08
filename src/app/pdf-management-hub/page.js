@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import Icon from '../../components/AppIcon';
 import Button from '../../components/ui/Button';
 import FileUploadPanel from '../../components/pdf-management-hub/FileUploadPanel';
@@ -210,7 +210,7 @@ const PDFManagementHub = () => {
             {/* Breadcrumb */}
             <div className="flex items-center space-x-2 text-sm">
               <Link 
-                to="/dashboard-overview" 
+                href="/dashboard-overview" 
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
                 Dashboard

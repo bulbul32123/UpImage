@@ -97,92 +97,231 @@ const ProcessingControls = ({ activeTab, onProcess, isProcessing, onSettingsChan
   };
 
   const renderBackgroundControls = () => (
-    <div className="space-y-4">
-      <Select
-        label="Processing Mode"
-        options={backgroundModeOptions}
-        value={backgroundSettings?.mode}
-        onChange={(value) => setBackgroundSettings(prev => ({ ...prev, mode: value }))}
-      />
-      
-      <Select
-        label="Precision Level"
-        description="Higher precision takes longer but provides better results"
-        options={precisionOptions}
-        value={backgroundSettings?.precision}
-        onChange={(value) => setBackgroundSettings(prev => ({ ...prev, precision: value }))}
-      />
-
-      <div className="bg-muted/50 rounded-lg p-3">
-        <div className="flex items-start space-x-2">
-          <Icon name="Info" size={16} color="var(--color-primary)" className="mt-0.5" />
-          <div className="text-sm">
-            <p className="text-foreground font-medium">AI Background Removal</p>
-            <p className="text-muted-foreground">
-              Our AI automatically detects and removes backgrounds with high precision. 
-              Manual refinement tools are available after processing.
-            </p>
+    <div className="space-y-6">
+  
+  
+      {/* Precision / Quality */}
+      <div>
+        <label className="block text-sm font-medium text-foreground mb-2">Precision / Quality</label>
+        <Select
+          options={precisionOptions} // High / Medium / Fast
+          value={backgroundSettings?.precision}
+          onChange={(value) =>
+            setBackgroundSettings(prev => ({ ...prev, precision: value }))
+          }
+        />
+      </div>
+  
+      {/* AI-Powered (Enhanced) Removal */}
+      {backgroundSettings.mode === 'ai' && (
+        <div className="bg-muted/50 rounded-lg p-3">
+          <div className="flex items-start space-x-2">
+            <Icon name="Zap" size={16} color="var(--color-primary)" className="mt-0.5" />
+            <div className="text-sm">
+              <p className="text-foreground font-medium">AI-Powered Removal</p>
+              <p className="text-muted-foreground">
+                Enhanced background removal using AI for better edge detection and complex backgrounds.
+              </p>
+            </div>
           </div>
         </div>
+      )}
+  
+      {/* Background Replacement / Fill */}
+      <div>
+        <label className="block text-sm font-medium text-foreground mb-2">Background Fill</label>
+        <Select
+          options={backgroundTypeOptions} // Transparent / Solid / Gradient / Image
+          value={compositionSettings?.backgroundType}
+          onChange={(value) =>
+            setCompositionSettings(prev => ({ ...prev, backgroundType: value }))
+          }
+        />
+        {compositionSettings.backgroundType === 'solid' && (
+          <div className="flex items-center space-x-2 mt-2">
+            <input
+              type="color"
+              value={compositionSettings.backgroundColor}
+              onChange={(e) =>
+                setCompositionSettings(prev => ({ ...prev, backgroundColor: e.target.value }))
+              }
+              className="w-12 h-10 border border-border rounded cursor-pointer"
+            />
+            <Input
+              type="text"
+              value={compositionSettings.backgroundColor}
+              onChange={(e) =>
+                setCompositionSettings(prev => ({ ...prev, backgroundColor: e.target.value }))
+              }
+              placeholder="#ffffff"
+              className="flex-1"
+            />
+          </div>
+        )}
+        {compositionSettings.backgroundType === 'gradient' && (
+          <p className="text-sm text-muted-foreground mt-2">Gradient options can be added here</p>
+        )}
+        {compositionSettings.backgroundType === 'image' && (
+          <p className="text-sm text-muted-foreground mt-2">Upload custom background image</p>
+        )}
+      </div>
+  
+      {/* Manual / Refinement Options */}
+      {backgroundSettings.mode === 'manual' && (
+        <div className="space-y-2">
+          <h4 className="text-sm font-medium text-foreground">Manual Refinement</h4>
+          <p className="text-muted-foreground text-sm">
+            Use brush, erase, or mask tools to refine edges after automatic detection.
+          </p>
+          <div className="grid grid-cols-2 gap-2 mt-2">
+            <Button variant="outline" size="sm" iconName="Brush" iconPosition="left">
+              Brush
+            </Button>
+            <Button variant="outline" size="sm" iconName="Eraser" iconPosition="left">
+              Erase
+            </Button>
+            <Button variant="outline" size="sm" iconName="Feather" iconPosition="left">
+              Feather
+            </Button>
+            <Button variant="outline" size="sm" iconName="Smooth" iconPosition="left">
+              Smooth
+            </Button>
+          </div>
+        </div>
+      )}
+  
+      {/* Reset / Auto Buttons */}
+      <div className="flex items-center space-x-2 mt-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() =>
+            setBackgroundSettings({ mode: 'automatic', precision: 'high' })
+          }
+          iconName="RotateCcw"
+          iconPosition="left"
+        >
+          Reset
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          iconName="Wand2"
+          iconPosition="left"
+          onClick={() => handleProcess(backgroundSettings)}
+        >
+          Auto Enhance
+        </Button>
       </div>
     </div>
   );
+  
 
   const renderEnhancementControls = () => (
-    <div className="space-y-6">
+    <div className="space-y-8 ">
       <div className="space-y-4">
+        {/* Brightness */}
         <div>
           <label className="block text-sm font-medium text-foreground mb-2">
-            Brightness: {enhancementSettings?.brightness > 0 ? '+' : ''}{enhancementSettings?.brightness}
+            Brightness: {enhancementSettings.brightness > 0 ? '+' : ''}{enhancementSettings.brightness}
           </label>
           <input
             type="range"
             min="-100"
             max="100"
-            value={enhancementSettings?.brightness}
-            onChange={(e) => handleEnhancementChange('brightness', parseInt(e?.target?.value))}
+            value={enhancementSettings.brightness}
+            onChange={(e) => handleEnhancementChange('brightness', parseInt(e.target.value))}
             className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer slider"
           />
         </div>
 
+        {/* Contrast */}
         <div>
           <label className="block text-sm font-medium text-foreground mb-2">
-            Contrast: {enhancementSettings?.contrast > 0 ? '+' : ''}{enhancementSettings?.contrast}
+            Contrast: {enhancementSettings.contrast > 0 ? '+' : ''}{enhancementSettings.contrast}
           </label>
           <input
             type="range"
             min="-100"
             max="100"
-            value={enhancementSettings?.contrast}
-            onChange={(e) => handleEnhancementChange('contrast', parseInt(e?.target?.value))}
+            value={enhancementSettings.contrast}
+            onChange={(e) => handleEnhancementChange('contrast', parseInt(e.target.value))}
             className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer slider"
           />
         </div>
 
+        {/* Saturation */}
         <div>
           <label className="block text-sm font-medium text-foreground mb-2">
-            Saturation: {enhancementSettings?.saturation > 0 ? '+' : ''}{enhancementSettings?.saturation}
+            Saturation: {enhancementSettings.saturation > 0 ? '+' : ''}{enhancementSettings.saturation}
           </label>
           <input
             type="range"
             min="-100"
             max="100"
-            value={enhancementSettings?.saturation}
-            onChange={(e) => handleEnhancementChange('saturation', parseInt(e?.target?.value))}
+            value={enhancementSettings.saturation}
+            onChange={(e) => handleEnhancementChange('saturation', parseInt(e.target.value))}
             className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer slider"
           />
         </div>
 
+        {/* Sharpness */}
         <div>
           <label className="block text-sm font-medium text-foreground mb-2">
-            Sharpness: {enhancementSettings?.sharpness > 0 ? '+' : ''}{enhancementSettings?.sharpness}
+            Sharpness: {enhancementSettings.sharpness > 0 ? '+' : ''}{enhancementSettings.sharpness}
+          </label>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={enhancementSettings.sharpness}
+            onChange={(e) => handleEnhancementChange('sharpness', parseInt(e.target.value))}
+            className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer slider"
+          />
+        </div>
+
+        {/* Gamma / Exposure */}
+        <div>
+          <label className="block text-sm font-medium text-foreground mb-2">
+            Gamma: {enhancementSettings.gamma}
+          </label>
+          <input
+            type="range"
+            min="0.1"
+            max="10"
+            step="0.1"
+            value={enhancementSettings.gamma}
+            onChange={(e) => handleEnhancementChange('gamma', parseFloat(e.target.value))}
+            className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer slider"
+          />
+        </div>
+
+        {/* Noise Reduction */}
+        <div>
+          <label className="block text-sm font-medium text-foreground mb-2">
+            Denoise: {enhancementSettings.denoise}
+          </label>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={enhancementSettings.denoise}
+            onChange={(e) => handleEnhancementChange('denoise', parseInt(e.target.value))}
+            className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer slider"
+          />
+        </div>
+
+        {/* Temperature */}
+        <div>
+          <label className="block text-sm font-medium text-foreground mb-2">
+            Temperature: {enhancementSettings.temperature}
           </label>
           <input
             type="range"
             min="-100"
             max="100"
-            value={enhancementSettings?.sharpness}
-            onChange={(e) => handleEnhancementChange('sharpness', parseInt(e?.target?.value))}
+            value={enhancementSettings.temperature}
+            onChange={(e) => handleEnhancementChange('temperature', parseInt(e.target.value))}
             className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer slider"
           />
         </div>
@@ -192,17 +331,19 @@ const ProcessingControls = ({ activeTab, onProcess, isProcessing, onSettingsChan
         <Button
           variant="outline"
           size="sm"
-          onClick={handleResetEnhancements}
+          onClick={() => handleEnhancementChange('reset', true)}
           iconName="RotateCcw"
           iconPosition="left"
         >
           Reset All
         </Button>
+        {/* Auto Enhance */}
         <Button
           variant="ghost"
           size="sm"
           iconName="Wand2"
           iconPosition="left"
+          onClick={() => handleEnhancementChange('autoEnhance', true)}
         >
           Auto Enhance
         </Button>
@@ -339,13 +480,13 @@ const ProcessingControls = ({ activeTab, onProcess, isProcessing, onSettingsChan
   };
 
   return (
-    <div className="bg-card border border-border rounded-lg p-6 space-y-6">
+    <div className="border border-border rounded-lg p-6 space-y-6">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-foreground">Processing Settings</h3>
-        <Icon name="Settings" size={20} color="var(--color-muted-foreground)" />
+        <h3 className="text-lg font-semibold text-foreground">Tool's Options</h3>
       </div>
-
-      {renderControls()}
+      <div className=" h-[23rem] overflow-x-hidden p-2">
+        {renderControls()}
+      </div>
 
       <div className="pt-4 border-t border-border">
         <Button
