@@ -9,12 +9,10 @@ export const AuthProvider = ({ children }) => {
     const router = useRouter();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
-    console.log("Authuser: ", user);
 
     const fetchUser = async () => {
         try {
             const { data } = await api.get('/auth/me');
-            console.log("data: ", data);
             if (data.success) setUser(data.user);
         } catch (err) {
             console.error(err);
@@ -30,7 +28,6 @@ export const AuthProvider = ({ children }) => {
     const refreshUser = async () => {
         try {
             const response = await api.get('/user/profile');
-            console.log("response: ", response);
             if (response.data.success) {
                 setUser(response.data.data);
             }
@@ -62,9 +59,4 @@ export const AuthProvider = ({ children }) => {
     );
 };
 
-// Custom hook for easier consumption
 export const useAuth = () => useContext(AuthContext);
-
-
-
-// Authentication is completed now work on Subscription model
