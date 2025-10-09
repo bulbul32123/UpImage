@@ -18,13 +18,11 @@ const BgRemoverTool = ({ userTier = 'paid' }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
-  // Batch processing states
   const [isBatchMode, setIsBatchMode] = useState(false);
   const [imageQueue, setImageQueue] = usePersistentQueue("batchQueue", []);
 
   const [currentProcessingIndex, setCurrentProcessingIndex] = useState(-1);
 
-  // Modal states
   const [showComparisonModal, setShowComparisonModal] = useState(false);
   const [selectedImageForView, setSelectedImageForView] = useState(null);
 
@@ -39,12 +37,11 @@ const BgRemoverTool = ({ userTier = 'paid' }) => {
     'image/gif'
   ];
 
-  const maxFileSize = 10 * 1024 * 1024; // 10MB
+  const maxFileSize = 10 * 1024 * 1024; 
 
 
   const handleFilesSelected = (files) => {
     if (isBatchMode && isPaidUser) {
-      // Batch mode for paid users
       if (files.length > maxBatchSize) {
         alert(`You can process up to ${maxBatchSize} images at once.`);
         return;
@@ -64,7 +61,6 @@ const BgRemoverTool = ({ userTier = 'paid' }) => {
 
       setImageQueue(prev => [...prev, ...newImages]);
     } else {
-      // Single mode
       setSelectedFiles(files);
       if (files?.length > 0) {
         const file = files[0];
@@ -105,8 +101,6 @@ const BgRemoverTool = ({ userTier = 'paid' }) => {
       setIsProcessing(false);
     }
   };
-
-  // Batch processing functions
   const processBatchImage = async (image, index) => {
     try {
       setCurrentProcessingIndex(index);
@@ -383,7 +377,6 @@ const BgRemoverTool = ({ userTier = 'paid' }) => {
             </div>
           </div>
 
-          {/* Single Mode */}
           {!isBatchMode && (
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-2 mt-8">
               <div className="xl:col-span-2 space-y-6">
@@ -427,10 +420,8 @@ const BgRemoverTool = ({ userTier = 'paid' }) => {
             </div>
           )}
 
-          {/* Batch Mode */}
           {isBatchMode && isPaidUser && (
             <div className="space-y-6">
-              {/* Upload Zone for Batch */}
               <div className="bg-card border border-border rounded-lg p-6">
                 <ImageUploadZone
                   onFilesSelected={handleFilesSelected}
@@ -441,7 +432,6 @@ const BgRemoverTool = ({ userTier = 'paid' }) => {
                 />
               </div>
 
-              {/* Stats */}
               {imageQueue.length > 0 && (
                 <div className="grid grid-cols-4 gap-4">
                   <div className="bg-card rounded-lg p-4 border border-border">
@@ -463,7 +453,6 @@ const BgRemoverTool = ({ userTier = 'paid' }) => {
                 </div>
               )}
 
-              {/* Controls */}
               {imageQueue.length > 0 && (
                 <div className="bg-card rounded-lg p-4 border border-border">
                   <div className="flex items-center justify-between">
@@ -510,7 +499,6 @@ const BgRemoverTool = ({ userTier = 'paid' }) => {
                 </div>
               )}
 
-              {/* Image Queue */}
               {imageQueue.length > 0 && (
                 <div className="bg-card rounded-lg p-6 border border-border">
                   <h3 className="text-lg font-semibold text-foreground mb-4">Image Queue</h3>
@@ -600,7 +588,6 @@ const BgRemoverTool = ({ userTier = 'paid' }) => {
                 </div>
               )}
 
-              {/* Empty State */}
               {imageQueue.length === 0 && (
                 <div className="bg-card rounded-lg p-12 text-center border border-border">
                   <Icon name="Upload" size={48} className="mx-auto mb-4 text-muted-foreground" />
@@ -623,7 +610,6 @@ const BgRemoverTool = ({ userTier = 'paid' }) => {
         onFileSelect={handleFileSelect}
       />
 
-      {/* Comparison Modal */}
       {showComparisonModal && selectedImageForView && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
@@ -633,7 +619,6 @@ const BgRemoverTool = ({ userTier = 'paid' }) => {
             className="relative w-2xl h-[40rem] mx-4 bg-card rounded-lg shadow-2xl border border-border"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Modal Header */}
             <div className="flex items-center justify-between p-6 border-b border-border">
               <div>
                 <h3 className="text-xl font-semibold text-foreground">
@@ -652,9 +637,7 @@ const BgRemoverTool = ({ userTier = 'paid' }) => {
               </Button>
             </div>
 
-            {/* Modal Content */}
             <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-border">
-              {/* Original */}
               <div className="p-4 space-y-2">
                 <h4 className="text-sm font-medium text-foreground">Original</h4>
                 <div
@@ -669,7 +652,6 @@ const BgRemoverTool = ({ userTier = 'paid' }) => {
                 </div>
               </div>
 
-              {/* Processed */}
               <div className="p-4 space-y-2">
                 <div className="flex items-center justify-between">
                   <h4 className="text-sm font-medium text-foreground">Processed</h4>
@@ -699,7 +681,6 @@ const BgRemoverTool = ({ userTier = 'paid' }) => {
                         className="relative w-2xl h-[40rem] mx-4 bg-card rounded-lg shadow-2xl border border-border"
                         onClick={(e) => e.stopPropagation()}
                       >
-                        {/* Modal Header */}
                         <div className="flex items-center justify-between p-6 border-b border-border">
                           <div>
                             <h3 className="text-xl font-semibold text-foreground">
@@ -718,9 +699,7 @@ const BgRemoverTool = ({ userTier = 'paid' }) => {
                           </Button>
                         </div>
 
-                        {/* Modal Content */}
                         <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-border border-b">
-                          {/* Original */}
                           <div className="p-4 space-y-2">
                             <h4 className="text-sm font-medium text-foreground">Original</h4>
                             <div
@@ -735,7 +714,6 @@ const BgRemoverTool = ({ userTier = 'paid' }) => {
                             </div>
                           </div>
 
-                          {/* Processed */}
                           <div className="flex flex-col justify-end p-4 space-y-2">
                             <div className="flex items-center justify-between">
                               <h4 className="text-sm font-medium text-foreground">Processed</h4>
@@ -845,6 +823,3 @@ export default BgRemoverTool;
 
 
 
-
-
-// Api routes 
