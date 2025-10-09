@@ -837,3 +837,14 @@ const BgRemoverTool = ({ userTier = 'paid' }) => {
 };
 
 export default BgRemoverTool;
+
+
+
+
+
+
+
+
+
+
+// Api routes 
