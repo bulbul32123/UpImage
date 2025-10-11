@@ -6,45 +6,40 @@
 
 @layer base {
   :root {
-    /* Core Colors */
-    --color-background: #FAFAFA; /* warm off-white */
-    --color-foreground: #1E293B; /* rich charcoal */
-    --color-card: #FFFFFF; /* pure white */
-    --color-card-foreground: #1E293B; /* rich charcoal */
-    --color-popover: #FFFFFF; /* pure white */
-    --color-popover-foreground: #1E293B; /* rich charcoal */
-    --color-muted: #F1F5F9; /* light gray */
-    --color-muted-foreground: #64748B; /* balanced gray */
-    --color-border: #E2E8F0; /* neutral gray */
-    --color-input: #FFFFFF; /* pure white */
-    --color-ring: #2563EB; /* trust-building blue */
+    --color-background: #FAFAFA; 
+    --color-foreground: #1E293B; 
+    --color-card: #FFFFFF; 
+    --color-card-foreground: #1E293B;
+    --color-popover: #FFFFFF; 
+    --color-popover-foreground: #1E293B; 
+    --color-muted: #F1F5F9; 
+    --color-muted-foreground: #64748B; 
+    --color-border: #E2E8F0; 
+    --color-input: #FFFFFF; 
+    --color-ring: #2563EB; 
 
-    /* Brand Colors */
-    --color-primary: #2563EB; /* trust-building blue */
-    --color-primary-foreground: #FFFFFF; /* white */
-    --color-secondary: #64748B; /* sophisticated slate */
-    --color-secondary-foreground: #FFFFFF; /* white */
-    --color-accent: #0EA5E9; /* energetic sky blue */
-    --color-accent-foreground: #FFFFFF; /* white */
+    --color-primary: #2563EB; 
+    --color-primary-foreground: #FFFFFF; 
+    --color-secondary: #64748B; 
+    --color-secondary-foreground: #FFFFFF; 
+    --color-accent: #0EA5E9; 
+    --color-accent-foreground: #FFFFFF; 
 
-    /* Status Colors */
-    --color-success: #10B981; /* confident green */
-    --color-success-foreground: #FFFFFF; /* white */
-    --color-warning: #F59E0B; /* attention-getting amber */
-    --color-warning-foreground: #FFFFFF; /* white */
-    --color-error: #EF4444; /* clear red */
-    --color-error-foreground: #FFFFFF; /* white */
-    --color-destructive: #EF4444; /* clear red */
-    --color-destructive-foreground: #FFFFFF; /* white */
+    --color-success: #10B981; 
+    --color-success-foreground: #FFFFFF; 
+    --color-warning: #F59E0B; 
+    --color-warning-foreground: #FFFFFF; 
+    --color-error: #EF4444; 
+    --color-error-foreground: #FFFFFF; 
+    --color-destructive: #EF4444; 
+    --color-destructive-foreground: #FFFFFF; 
 
-    /* Shadow Variables */
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     --shadow-default: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 
-    /* Border Radius */
     --radius-sm: 4px;
     --radius-default: 8px;
     --radius-lg: 12px;
@@ -84,7 +79,6 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 
-  /* Typography Base */
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Inter', sans-serif;
     font-weight: 600;
@@ -102,12 +96,10 @@
     font-weight: 400;
   }
 
-  /* Smooth transitions for micro-interactions */
   button, a, input, select, textarea {
     transition: all 150ms ease-out;
   }
 
-  /* Focus styles */
   :focus-visible {
     outline: 2px solid var(--color-ring);
     outline-offset: 2px;
@@ -141,7 +133,6 @@
 }
 
 @layer components {
-  /* Custom shadow utilities */
   .shadow-resting {
     box-shadow: var(--shadow-default);
   }
@@ -154,17 +145,13 @@
     box-shadow: var(--shadow-lg);
   }
 
-  /* Micro-interaction utilities */
   .scale-press {
     transform: scale(0.98);
   }
-
-  /* Loading skeleton animation */
   .skeleton {
     @apply animate-pulse bg-muted;
   }
 
-  /* Fluid typography utilities */
   .text-fluid-sm {
     font-size: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
   }
