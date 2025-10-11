@@ -4,15 +4,12 @@ import { cookies } from 'next/headers';
 const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production';
 const JWT_EXPIRE = '7d';
 const COOKIE_NAME = 'auth_token';
-
-// Generate JWT token
 export function generateToken(userId) {
     return jwt.sign({ userId }, JWT_SECRET, {
         expiresIn: JWT_EXPIRE
     });
 }
 
-// Verify JWT token
 export function verifyToken(token) {
     try {
         return jwt.verify(token, JWT_SECRET);
@@ -21,7 +18,6 @@ export function verifyToken(token) {
     }
 }
 
-// Set auth cookie
 export async function setAuthCookie(token) {
     const cookieStore = await cookies();
 
@@ -31,24 +27,21 @@ export async function setAuthCookie(token) {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
-        maxAge: 60 * 60 * 24 * 7, // 7 days
+        maxAge: 60 * 60 * 24 * 7,
         path: '/'
     });
 }
 
-// Get auth cookie
 export async function getAuthCookie() {
     const cookieStore = await cookies();
     return cookieStore.get(COOKIE_NAME)?.value;
 }
 
-// Remove auth cookie
 export async function removeAuthCookie() {
     const cookieStore = await cookies();
     cookieStore.delete(COOKIE_NAME);
 }
 
-// Get current user from cookie
 export async function getCurrentUser() {
     try {
         const token = await getAuthCookie();
@@ -67,7 +60,6 @@ export async function getCurrentUser() {
     }
 }
 
-// Validate password strength
 export function validatePassword(password) {
     const minLength = 8;
     const hasUpperCase = /[A-Z]/.test(password);
