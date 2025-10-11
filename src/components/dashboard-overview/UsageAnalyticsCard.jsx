@@ -16,7 +16,7 @@ const UsageAnalyticsCard = ({ analyticsData, className = "" }) => {
   };
 
   const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
-    if (percent < 0.05) return null; // Don't show labels for slices less than 5%
+    if (percent < 0.05) return null; 
     
     const RADIAN = Math.PI / 180;
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
@@ -51,7 +51,6 @@ const UsageAnalyticsCard = ({ analyticsData, className = "" }) => {
           </select>
         </div>
       </div>
-      {/* Daily Usage Chart */}
       <div className="mb-8">
         <h3 className="text-sm font-medium text-foreground mb-3">Daily Processing Volume</h3>
         <div className="w-full h-48">
@@ -77,7 +76,6 @@ const UsageAnalyticsCard = ({ analyticsData, className = "" }) => {
           </ResponsiveContainer>
         </div>
       </div>
-      {/* Tool Usage Distribution */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div>
           <h3 className="text-sm font-medium text-foreground mb-3">Tool Usage Distribution</h3>
@@ -127,7 +125,6 @@ const UsageAnalyticsCard = ({ analyticsData, className = "" }) => {
           </div>
         </div>
       </div>
-      {/* Key Metrics */}
       <div className="mt-6 pt-6 border-t border-border">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="text-center">
