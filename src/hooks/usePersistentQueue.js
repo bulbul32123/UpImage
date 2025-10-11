@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 
 export function usePersistentQueue(key = "batchQueue", initialValue = []) {
     const [queue, setQueue] = useState(initialValue);
-
-    // Load from localStorage (client only)
     useEffect(() => {
         try {
             const stored = localStorage.getItem(key);
@@ -16,7 +14,6 @@ export function usePersistentQueue(key = "batchQueue", initialValue = []) {
         }
     }, [key]);
 
-    // Save to localStorage whenever queue changes
     useEffect(() => {
         try {
             localStorage.setItem(key, JSON.stringify(queue));
