@@ -26,7 +26,7 @@ export async function POST(request) {
     const base64 = buffer.toString('base64');
     const dataURI = `data:${file.type};base64,${base64}`;
     
-    const result = await cloudinary.uploader.upload(dataURI, {
+    const result = await cloudinary?.uploader?.upload(dataURI, {
       folder: 'profile-pictures',
       transformation: [
         { width: 400, height: 400, crop: 'fill', gravity: 'face' },
