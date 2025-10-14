@@ -1,3 +1,4 @@
+
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import User from '@/models/User';
@@ -6,10 +7,7 @@ import { getCurrentUser } from '@/lib/auth';
 export async function GET(request) {
   try {
     await dbConnect();
-
     const currentUser = await getCurrentUser();
-    console.log("currentUser: ", currentUser);
-
 
     if (!currentUser) {
       return NextResponse.json(
@@ -17,10 +15,7 @@ export async function GET(request) {
         { status: 401 }
       );
     }
-
     const user = await User.findById(currentUser.userId);
-    console.log("user: ", user);
-
 
     if (!user) {
       return NextResponse.json(
