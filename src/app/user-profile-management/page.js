@@ -1,191 +1,357 @@
-"use client"
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-import Icon from '../../components/AppIcon';
-import AccountDetailsTab from '../../components/user-profile-management/AccountDetailsTab';
-import SubscriptionTab from '../../components/user-profile-management/SubscriptionTab';
-import UsageAnalyticsTab from '../../components/user-profile-management/UsageAnalyticsTab';
-import SecurityTab from '../../components/user-profile-management/SecurityTab';
-import { useAuth } from '@/context/AuthContext';
+"use client";
+import React, { useCallback } from "react";
+import Icon from "@/components/AppIcon";
+import Image from "@/components/AppImage";
+import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
+import { Checkbox } from "@/components/ui/Checkbox";
+import { useAuth } from "@/context/AuthContext";
+import { useProfileUpdate } from "@/hooks/useProfileUpdate";
 
-const UserProfileManagement = () => {
-  const [activeTab, setActiveTab] = useState('account');
-  const { user, loading } = useAuth();
-  const tabs = [
-    {
-      id: 'account',
-      label: 'Account Details',
-      icon: 'User',
-      component: AccountDetailsTab
-    },
-    {
-      id: 'subscription',
-      label: 'Subscription & Billing',
-      icon: 'CreditCard',
-      component: SubscriptionTab
-    },
-    {
-      id: 'analytics',
-      label: 'Usage Analytics',
-      icon: 'BarChart3',
-      component: UsageAnalyticsTab
-    },
-    {
-      id: 'security',
-      label: 'Security Settings',
-      icon: 'Shield',
-      component: SecurityTab
-    }
-  ];
+const Account = () => {
+  const { user, loading, formData } = useAuth();
+  const {
+    localFormData,
+    uiState,
+    fileInputRef,
+    handleInputChange,
+    handleImageUpload,
+    handleSave,
+    handleCancel,
+    handleEditClick,
+    isFormChanged,
+  } = useProfileUpdate({
+    name: formData.name,
+    email: formData.email,
+    profileImage: formData.profileImage,
+    originalProfileImage: formData.profileImage,
+  });
 
-  const ActiveComponent = tabs?.find(tab => tab?.id === activeTab)?.component;
+  const [notifications, setNotifications] = React.useState({
+    emailUpdates: true,
+    smsAlerts: false,
+    marketingEmails: true,
+    securityAlerts: true,
+    usageReports: true,
+  });
+
+  const handleNotificationChange = useCallback((field, checked) => {
+    setNotifications((prev) => ({
+      ...prev,
+      [field]: checked,
+    }));
+  }, []);
+
+  const triggerFileInput = useCallback(() => {
+    fileInputRef.current?.click();
+  }, [fileInputRef]);
+
+  if (loading) {
+    return <AccountSkeleton />;
+  }
+
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header with Breadcrumb */}
-      <div className="bg-card border-b border-border shadow-resting">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Breadcrumb */}
-            <nav className="flex items-center space-x-2 text-sm">
-              <Link
-                href="/dashboard-overview"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Dashboard
-              </Link>
-              <Icon name="ChevronRight" size={16} color="var(--color-muted-foreground)" />
-              <span className="text-foreground font-medium">Profile Settings</span>
-            </nav>
-
-            {/* Quick Actions */}
-            <div className="flex items-center space-x-3">
-              <Link href="/dashboard-overview">
-                <button className="flex items-center space-x-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  <Icon name="ArrowLeft" size={16} />
-                  <span className="hidden sm:inline">Back to Dashboard</span>
-                </button>
-              </Link>
+    <div className="col-span-2 lg:col-span-3">
+      {/* Header */}
+      <div className="pb-6">
+        <div className="bg-card rounded-lg p-6 border border-border shadow-resting">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+              <Icon name="User" size={20} color="var(--color-primary)" />
+            </div>
+            <div>
+              <h1 className="text-fluid-2xl font-semibold text-foreground">
+                Account Details
+              </h1>
+              <p className="text-sm text-muted-foreground">
+                Manage your personal information and preferences
+              </p>
             </div>
           </div>
         </div>
       </div>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Sidebar Navigation */}
-          <div className="lg:col-span-1">
-            <div className="bg-card rounded-lg border border-border shadow-resting p-6 sticky top-8">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
-                  <Icon name="User" size={24} color="white" />
-                </div>
-                <div>
-                  <h2 className="text-lg font-semibold text-foreground">{user?.name}</h2>
-                  <p className="text-sm text-muted-foreground">Pro Plan</p>
-                </div>
-              </div>
 
-              <nav className="space-y-2">
-                {tabs?.map((tab) => (
-                  <button
-                    key={tab?.id}
-                    onClick={() => setActiveTab(tab?.id)}
-                    className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-left transition-colors ${activeTab === tab?.id
-                      ? 'bg-primary text-primary-foreground'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                      }`}
-                  >
-                    <Icon
-                      name={tab?.icon}
-                      size={18}
-                      color={activeTab === tab?.id ? 'white' : 'var(--color-muted-foreground)'}
-                    />
-                    <span className="text-sm font-medium">{tab?.label}</span>
-                  </button>
-                ))}
-              </nav>
-
-              {/* Quick Stats */}
-              <div className="mt-8 pt-6 border-t border-border">
-                <h3 className="text-sm font-medium text-foreground mb-4">Quick Stats</h3>
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-muted-foreground">Files Processed</span>
-                    <span className="text-xs font-medium text-foreground">1,247</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-muted-foreground">Storage Used</span>
-                    <span className="text-xs font-medium text-foreground">3.2 GB</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-muted-foreground">Member Since</span>
-                    <span className="text-xs font-medium text-foreground">Jan 2024</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Main Content */}
-          <div className="lg:col-span-3">
-            {/* Mobile Tab Navigation */}
-            <div className="lg:hidden mb-6">
-              <div className="bg-card rounded-lg border border-border shadow-resting p-2">
-                <div className="flex space-x-1 overflow-x-auto">
-                  {tabs?.map((tab) => (
-                    <button
-                      key={tab?.id}
-                      onClick={() => setActiveTab(tab?.id)}
-                      className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium whitespace-nowrap transition-colors ${activeTab === tab?.id
-                        ? 'bg-primary text-primary-foreground'
-                        : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                        }`}
-                    >
-                      <Icon
-                        name={tab?.icon}
-                        size={16}
-                        color={activeTab === tab?.id ? 'white' : 'var(--color-muted-foreground)'}
-                      />
-                      <span className="hidden sm:inline">{tab?.label}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Tab Content */}
-            <div className="space-y-6">
-              {/* Tab Header */}
-              <div className="bg-card rounded-lg p-6 border border-border shadow-resting">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-                    <Icon
-                      name={tabs?.find(tab => tab?.id === activeTab)?.icon}
-                      size={20}
-                      color="var(--color-primary)"
-                    />
-                  </div>
-                  <div>
-                    <h1 className="text-fluid-2xl font-semibold text-foreground">
-                      {tabs?.find(tab => tab?.id === activeTab)?.label}
-                    </h1>
-                    <p className="text-sm text-muted-foreground">
-                      {activeTab === 'account' && 'Manage your personal information and preferences'}
-                      {activeTab === 'subscription' && 'View and manage your subscription and billing details'}
-                      {activeTab === 'analytics' && 'Track your usage patterns and performance metrics'}
-                      {activeTab === 'security' && 'Secure your account with advanced security settings'}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Dynamic Tab Content */}
-              {ActiveComponent && <ActiveComponent user={user} />}
-            </div>
-          </div>
+      {/* Messages */}
+      {uiState.success && (
+        <div className="mb-4 bg-green-50 border border-green-200 rounded-lg p-4 flex items-start space-x-3 animate-in fade-in">
+          <Icon name="CheckCircle" size={20} color="green" />
+          <p className="text-sm text-green-800">{uiState.success}</p>
         </div>
-      </div>
+      )}
+
+      {uiState.error && (
+        <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-4 flex items-start space-x-3 animate-in fade-in">
+          <Icon name="AlertCircle" size={20} color="red" />
+          <p className="text-sm text-red-800">{uiState.error}</p>
+        </div>
+      )}
+
+      {/* Profile Picture Section */}
+      <ProfilePictureSection
+        localFormData={localFormData}
+        uiState={uiState}
+        fileInputRef={fileInputRef}
+        handleImageUpload={handleImageUpload}
+        triggerFileInput={triggerFileInput}
+        loading={loading}
+      />
+
+      {/* Personal Information */}
+      <PersonalInfoSection
+        localFormData={localFormData}
+        uiState={uiState}
+        handleInputChange={handleInputChange}
+        handleSave={handleSave}
+        handleCancel={handleCancel}
+        handleEditClick={handleEditClick}
+        isFormChanged={isFormChanged}
+        loading={loading}
+      />
+
+      {/* Notification Preferences */}
+      <NotificationsSection
+        notifications={notifications}
+        handleNotificationChange={handleNotificationChange}
+        isEditing={uiState.isEditing}
+      />
     </div>
   );
 };
 
-export default UserProfileManagement;
+const ProfilePictureSection = React.memo(
+  ({
+    localFormData,
+    uiState,
+    fileInputRef,
+    handleImageUpload,
+    triggerFileInput,
+    loading,
+  }) => (
+    <div className="bg-card rounded-lg p-6 border border-border shadow-resting mb-4">
+      <h3 className="text-lg font-semibold text-foreground mb-4">Profile Picture</h3>
+
+      <div className="flex items-center space-x-4">
+        <div className="relative">
+          <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-border">
+            {loading ? (
+              <div className="w-full h-full bg-gray-200 animate-pulse flex items-center justify-center">
+                <Icon name="Loader" size={22} className="animate-spin text-muted-foreground" />
+              </div>
+            ) : localFormData.profileImage ? (
+              <Image
+                src={localFormData.profileImage}
+                alt="Profile"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                <Icon name="User" size={22} color="var(--color-muted-foreground)" />
+              </div>
+            )}
+          </div>
+
+          {uiState.isEditing && !loading && (
+            <label className="absolute -bottom-2 -right-2 w-8 h-8 bg-primary rounded-full flex items-center justify-center cursor-pointer hover:bg-primary/90 transition-colors shadow-md">
+              <Icon name="Camera" size={16} color="white" />
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+                disabled={uiState.isUploadingImage}
+              />
+            </label>
+          )}
+        </div>
+
+        <div className="flex-1 space-y-2">
+          <h4 className="text-base font-medium text-foreground">
+            {localFormData.name}
+          </h4>
+          <p className="text-sm text-muted-foreground mb-3">
+            {localFormData.email}
+          </p>
+
+          {uiState.isEditing && (
+            <div className="space-y-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={triggerFileInput}
+                disabled={loading || uiState.isUploadingImage}
+              >
+                <Icon name="Upload" size={16} className="mr-2" />
+                {uiState.isUploadingImage ? "Uploading..." : "Upload New Photo"}
+              </Button>
+              <p className="text-xs text-muted-foreground">
+                JPG, PNG, GIF or WebP. Max 5MB. Recommended 400x400px.
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+);
+
+ProfilePictureSection.displayName = "ProfilePictureSection";
+
+const PersonalInfoSection = React.memo(
+  ({
+    localFormData,
+    uiState,
+    handleInputChange,
+    handleSave,
+    handleCancel,
+    handleEditClick,
+    isFormChanged,
+    loading,
+  }) => (
+    <div className="bg-card rounded-lg p-6 border border-border shadow-resting mb-4">
+      <div className="flex items-center justify-between mb-6">
+        <h3 className="text-lg font-semibold text-foreground">Personal Information</h3>
+        {!uiState.isEditing ? (
+          <Button
+            variant="outline"
+            disabled={loading}
+            onClick={handleEditClick}
+          >
+            <Icon name="Edit" size={16} className="mr-2" />
+            Edit Profile
+          </Button>
+        ) : (
+          <div className="flex space-x-2">
+            <Button
+              variant="outline"
+              onClick={handleCancel}
+              disabled={uiState.isSaving}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSave}
+              disabled={!isFormChanged || uiState.isSaving}
+            >
+              <Icon name="Save" size={16} className="mr-2" />
+              {uiState.isSaving ? "Saving..." : "Save Changes"}
+            </Button>
+          </div>
+        )}
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Input
+          label="Full Name"
+          type="text"
+          value={localFormData.name}
+          onChange={(e) => handleInputChange("name", e?.target?.value)}
+          disabled={!uiState.isEditing || loading}
+          loading={loading}
+          required
+        />
+
+        <Input
+          label="Email Address"
+          type="email"
+          value={localFormData.email}
+          onChange={(e) => handleInputChange("email", e?.target?.value)}
+          disabled={!uiState.isEditing || loading}
+          loading={loading}
+          description="Used for login and notifications"
+          required
+        />
+      </div>
+    </div>
+  )
+);
+
+PersonalInfoSection.displayName = "PersonalInfoSection";
+
+const NotificationsSection = React.memo(
+  ({ notifications, handleNotificationChange, isEditing }) => (
+    <div className="bg-card rounded-lg p-6 border border-border shadow-resting">
+      <h3 className="text-lg font-semibold text-foreground mb-6">Notification Preferences</h3>
+      <div className="space-y-4">
+        {[
+          {
+            key: "emailUpdates",
+            label: "Email Updates",
+            desc: "Receive updates about new features",
+          },
+          {
+            key: "smsAlerts",
+            label: "SMS Alerts",
+            desc: "Get texts for important activities",
+          },
+          {
+            key: "marketingEmails",
+            label: "Marketing Emails",
+            desc: "Receive promotional content",
+          },
+          {
+            key: "securityAlerts",
+            label: "Security Alerts",
+            desc: "Important security notifications (recommended)",
+          },
+          {
+            key: "usageReports",
+            label: "Usage Reports",
+            desc: "Monthly usage and statistics",
+          },
+        ].map(({ key, label, desc }) => (
+          <Checkbox
+            key={key}
+            label={label}
+            description={desc}
+            checked={notifications[key]}
+            onChange={(e) => handleNotificationChange(key, e?.target?.checked)}
+            disabled={!isEditing}
+          />
+        ))}
+      </div>
+    </div>
+  )
+);
+
+NotificationsSection.displayName = "NotificationsSection";
+
+// ============================================================================
+// SKELETON LOADER
+// ============================================================================
+const AccountSkeleton = () => (
+  <div className="col-span-2 lg:col-span-3">
+    <div className="pb-6">
+      <div className="bg-card rounded-lg p-6 border border-border shadow-resting">
+        <div className="flex items-center space-x-3">
+          <div className="w-10 h-10 bg-gray-200 rounded-lg animate-pulse" />
+          <div className="flex-1">
+            <div className="h-6 w-40 bg-gray-200 rounded-md animate-pulse mb-2" />
+            <div className="h-4 w-56 bg-gray-200 rounded-md animate-pulse" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div className="bg-card rounded-lg p-6 border border-border shadow-resting mb-4">
+      <div className="h-6 w-32 bg-gray-200 rounded-md animate-pulse mb-4" />
+      <div className="flex items-center space-x-4">
+        <div className="w-24 h-24 bg-gray-200 rounded-full animate-pulse" />
+        <div className="flex-1 space-y-2">
+          <div className="h-5 w-40 bg-gray-200 rounded-md animate-pulse" />
+          <div className="h-4 w-56 bg-gray-200 rounded-md animate-pulse" />
+        </div>
+      </div>
+    </div>
+
+    <div className="bg-card rounded-lg p-6 border border-border shadow-resting mb-4">
+      <div className="h-6 w-32 bg-gray-200 rounded-md animate-pulse mb-6" />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="h-10 bg-gray-200 rounded-md animate-pulse" />
+        <div className="h-10 bg-gray-200 rounded-md animate-pulse" />
+      </div>
+    </div>
+  </div>
+);
+
+export default Account;
