@@ -18,7 +18,6 @@ export async function GET(request) {
       );
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("decoded: ", decoded);
     const user = await User.findById(decoded.userId).select('-password');
 
     if (!user) {
@@ -60,15 +59,12 @@ export async function PUT(request) {
 
     // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("decoded: ", decoded);
 
     // Get update data from request
     const body = await request.json();
     const { name, email, profileImage } = body;
 
-    // Find user
     const user = await User.findById(decoded.userId);
-    console.log("user: ", user);
     if (!user) {
       return NextResponse.json(
         { success: false, message: 'User not found' },
@@ -76,7 +72,6 @@ export async function PUT(request) {
       );
     }
 
-    // Check if email is being changed and if it's already taken
     if (email && email !== user.email) {
       const emailExists = await User.findOne({ email, _id: { $ne: user._id } });
       if (emailExists) {
@@ -94,7 +89,6 @@ export async function PUT(request) {
 
     await user.save();
     const updatedUser = await User.findById(user._id).select('-password');
-    console.log(updatedUser);
     return NextResponse.json({
       success: true,
       message: 'Profile updated successfully',
