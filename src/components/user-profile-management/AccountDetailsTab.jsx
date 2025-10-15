@@ -9,7 +9,7 @@ import api from '@/lib/axios';
 import { useAuth } from '@/context/AuthContext';
 
 const AccountDetailsTab = ({ user: initialUser }) => {
-  const { refreshUser, fetchUser } = useAuth();
+  const { refreshUser, loading } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -35,7 +35,7 @@ const AccountDetailsTab = ({ user: initialUser }) => {
       setFormData({
         name: initialUser.name || '',
         email: initialUser.email || '',
-        profileImage: initialUser.profileImage || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face'
+        profileImage: initialUser.profileImage
       });
     }
   }, [initialUser]);
@@ -138,7 +138,7 @@ const AccountDetailsTab = ({ user: initialUser }) => {
       setFormData({
         name: initialUser.name || '',
         email: initialUser.email || '',
-        profileImage: initialUser.profileImage || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face'
+        profileImage: initialUser.profileImage
       });
     }
     setIsEditing(false);
@@ -172,11 +172,21 @@ const AccountDetailsTab = ({ user: initialUser }) => {
                   <Icon name="Loader" size={24} className="animate-spin" />
                 </div>
               ) : (
-                <Image
-                  src={formData.profileImage || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face'}
-                  alt="Profile"
-                  className="w-full h-full object-cover"
-                />
+                <div className="">
+                  {
+                    loading ? (
+                      <Image
+                        src={formData.profileImage}
+                        alt="Profile"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-gray-200">
+                        <Icon name="Loader" size={24} className="animate-spin" />
+                      </div>
+                    )
+                  }
+                </div>
 
               )}
             </div>
