@@ -9,7 +9,7 @@ const FileUploadZone = ({ onFilesSelected, acceptedFormats, maxFileSize, classNa
   const fileInputRef = useRef(null);
 
   const supportedFormats = acceptedFormats;
-  const maxSize = maxFileSize || 50; // MB
+  const maxSize = maxFileSize || 50;
 
   const validateFile = (file) => {
     const fileExtension = '.' + file?.name?.split('.')?.pop()?.toLowerCase();
@@ -86,7 +86,6 @@ const FileUploadZone = ({ onFilesSelected, acceptedFormats, maxFileSize, classNa
 
   return (
     <div className={`space-y-4 ${className}`}>
-      {/* Upload Zone */}
       <div
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -165,7 +164,6 @@ const FileUploadZone = ({ onFilesSelected, acceptedFormats, maxFileSize, classNa
           </div>
         </div>
       </div> */}
-      {/* Error Display */}
       {uploadError && (
         <div className="bg-error/10 border border-error/20 rounded-lg p-4">
           <div className="flex items-start space-x-2">
