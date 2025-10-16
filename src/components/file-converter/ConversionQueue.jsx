@@ -15,7 +15,6 @@ const ConversionQueue = ({
   const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
-    // Initialize conversion states for new files
     const newStates = {};
     files?.forEach(file => {
       if (!conversionStates?.[file?.id]) {
@@ -25,7 +24,7 @@ const ConversionQueue = ({
           error: null,
           estimatedTime: null,
           downloadUrl: null,
-          targetFormat: 'png' // Default target format for each file
+          targetFormat: 'png'
         };
       }
     });
@@ -103,7 +102,6 @@ const ConversionQueue = ({
   const handleStartConversion = async () => {
     if (!sourceFormat) return;
 
-    // Check if all files have target formats selected
     const filesWithoutFormat = files.filter(file =>
       !conversionStates[file.id]?.targetFormat
     );
@@ -115,7 +113,6 @@ const ConversionQueue = ({
 
     setIsProcessing(true);
 
-    // Process files sequentially
     for (const file of files) {
       if (conversionStates?.[file?.id]?.status === "pending") {
         await convertFile(file.id, file);
@@ -189,7 +186,6 @@ const ConversionQueue = ({
 
   return (
     <div className={`space-y-6 ${className}`}>
-      {/* Queue Header */}
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-lg font-semibold text-foreground">Conversion Queue</h3>
@@ -220,7 +216,6 @@ const ConversionQueue = ({
         )}
       </div>
 
-      {/* File Queue */}
       <div className="space-y-3">
         {files?.map(file => {
           const state = conversionStates?.[file?.id] || {
@@ -246,7 +241,6 @@ const ConversionQueue = ({
                   </div>
                 </div>
 
-                {/* Format conversion display */}
                 {sourceFormat && state.targetFormat && (
                   <div className="bg-card border border-border rounded-lg p-2 mx-4">
                     <div className="flex items-center justify-center space-x-4">
@@ -269,7 +263,6 @@ const ConversionQueue = ({
                   </div>
                 )}
 
-                {/* Individual format selector */}
                 <select
                   value={state.targetFormat || ''}
                   onChange={(e) => handleFormatChange(file.id, e.target.value)}
@@ -323,7 +316,6 @@ const ConversionQueue = ({
                 </div>
               </div>
 
-              {/* Progress Bar */}
               {(state?.status === 'converting' || state?.status === 'completed') && (
                 <div className="mb-2">
                   <div className="flex items-center justify-between mb-1">
@@ -346,7 +338,6 @@ const ConversionQueue = ({
                 </div>
               )}
 
-              {/* Error Message */}
               {state?.status === 'error' && state?.error && (
                 <div className="flex items-start space-x-2 p-2 bg-error/10 border border-error/20 rounded text-xs text-error">
                   <Icon name="AlertTriangle" size={12} className="flex-shrink-0 mt-0.5" />
@@ -358,7 +349,6 @@ const ConversionQueue = ({
         })}
       </div>
 
-      {/* Batch Download */}
       {completedFiles?.length > 1 && (
         <div className="bg-success/10 border border-success/20 rounded-lg p-4">
           <div className="flex items-center justify-between">
