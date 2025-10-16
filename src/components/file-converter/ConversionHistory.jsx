@@ -4,7 +4,7 @@ import Icon from '../../components/AppIcon';
 import Button from '../../components/ui/Button';
 
 const ConversionHistory = ({ className = "" }) => {
-  const [historyFilter, setHistoryFilter] = useState('all'); // all, today, week, month
+  const [historyFilter, setHistoryFilter] = useState('all'); 
 
   const mockHistory = [
     {
@@ -13,7 +13,7 @@ const ConversionHistory = ({ className = "" }) => {
       sourceFormat: 'pdf',
       targetFormat: 'docx',
       fileSize: '2.4 MB',
-      convertedAt: new Date(Date.now() - 1000 * 60 * 30), // 30 minutes ago
+      convertedAt: new Date(Date.now() - 1000 * 60 * 30),
       downloadUrl: '#download-1',
       status: 'completed'
     },
@@ -23,7 +23,7 @@ const ConversionHistory = ({ className = "" }) => {
       sourceFormat: 'txt',
       targetFormat: 'pdf',
       fileSize: '156 KB',
-      convertedAt: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
+      convertedAt: new Date(Date.now() - 1000 * 60 * 60 * 2), 
       downloadUrl: '#download-2',
       status: 'completed'
     },
@@ -33,7 +33,7 @@ const ConversionHistory = ({ className = "" }) => {
       sourceFormat: 'docx',
       targetFormat: 'pdf',
       fileSize: '1.8 MB',
-      convertedAt: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 day ago
+      convertedAt: new Date(Date.now() - 1000 * 60 * 60 * 24), 
       downloadUrl: '#download-3',
       status: 'completed'
     },
@@ -43,7 +43,7 @@ const ConversionHistory = ({ className = "" }) => {
       sourceFormat: 'html',
       targetFormat: 'pdf',
       fileSize: '892 KB',
-      convertedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3), // 3 days ago
+      convertedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3), 
       downloadUrl: '#download-4',
       status: 'completed'
     },
@@ -53,7 +53,7 @@ const ConversionHistory = ({ className = "" }) => {
       sourceFormat: 'rtf',
       targetFormat: 'docx',
       fileSize: '445 KB',
-      convertedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7), // 1 week ago
+      convertedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7),
       downloadUrl: '#download-5',
       status: 'completed'
     }
@@ -111,7 +111,6 @@ const ConversionHistory = ({ className = "" }) => {
 
   return (
     <div className={`space-y-4 ${className}`}>
-      {/* History Header */}
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-lg font-semibold text-foreground">Conversion History</h3>
@@ -129,7 +128,6 @@ const ConversionHistory = ({ className = "" }) => {
           Clear History
         </Button>
       </div>
-      {/* Filter Tabs */}
       <div className="flex space-x-1 bg-muted rounded-lg p-1">
         {filterOptions?.map(option => (
           <button
@@ -146,7 +144,6 @@ const ConversionHistory = ({ className = "" }) => {
           </button>
         ))}
       </div>
-      {/* History List */}
       <div className="space-y-2">
         {filteredHistory?.length === 0 ? (
           <div className="text-center py-8">
@@ -211,7 +208,6 @@ const ConversionHistory = ({ className = "" }) => {
           ))
         )}
       </div>
-      {/* Usage Stats */}
       {filteredHistory?.length > 0 && (
         <div className="bg-muted/50 rounded-lg p-4 border border-border">
           <h4 className="text-sm font-medium text-foreground mb-3">Usage Statistics</h4>
