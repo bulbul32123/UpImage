@@ -178,13 +178,3 @@ export const useAuth = () => {
     }
     return context;
 };
-
-
-git add src/context/AuthContext.js
-git commit -m "context AuthContext.js updated" --date="2025-10-15"
-git push -u origin main
-
-git add src/lib/auth.js
-git add src/lib/axios.js
-git add src/styles/index.css
-git add src/styles/tailwind.css
