@@ -148,10 +148,23 @@
   .scale-press {
     transform: scale(0.98);
   }
-  .skeleton {
-    @apply animate-pulse bg-muted;
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
   }
-
+  .skeleton {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(
+      90deg,
+      var(--color-muted) 25%,
+      var(--color-muted-foreground) 50%,
+      var(--color-muted) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
   .text-fluid-sm {
     font-size: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
   }
