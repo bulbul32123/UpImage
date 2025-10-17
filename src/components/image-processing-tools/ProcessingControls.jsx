@@ -112,7 +112,6 @@ const ProcessingControls = ({ activeTab, onProcess, isProcessing, onSettingsChan
         />
       </div>
   
-      {/* AI-Powered (Enhanced) Removal */}
       {backgroundSettings.mode === 'ai' && (
         <div className="bg-muted/50 rounded-lg p-3">
           <div className="flex items-start space-x-2">
@@ -127,11 +126,10 @@ const ProcessingControls = ({ activeTab, onProcess, isProcessing, onSettingsChan
         </div>
       )}
   
-      {/* Background Replacement / Fill */}
       <div>
         <label className="block text-sm font-medium text-foreground mb-2">Background Fill</label>
         <Select
-          options={backgroundTypeOptions} // Transparent / Solid / Gradient / Image
+          options={backgroundTypeOptions}
           value={compositionSettings?.backgroundType}
           onChange={(value) =>
             setCompositionSettings(prev => ({ ...prev, backgroundType: value }))
@@ -166,7 +164,6 @@ const ProcessingControls = ({ activeTab, onProcess, isProcessing, onSettingsChan
         )}
       </div>
   
-      {/* Manual / Refinement Options */}
       {backgroundSettings.mode === 'manual' && (
         <div className="space-y-2">
           <h4 className="text-sm font-medium text-foreground">Manual Refinement</h4>
@@ -190,7 +187,6 @@ const ProcessingControls = ({ activeTab, onProcess, isProcessing, onSettingsChan
         </div>
       )}
   
-      {/* Reset / Auto Buttons */}
       <div className="flex items-center space-x-2 mt-4">
         <Button
           variant="outline"
@@ -220,7 +216,6 @@ const ProcessingControls = ({ activeTab, onProcess, isProcessing, onSettingsChan
   const renderEnhancementControls = () => (
     <div className="space-y-8 ">
       <div className="space-y-4">
-        {/* Brightness */}
         <div>
           <label className="block text-sm font-medium text-foreground mb-2">
             Brightness: {enhancementSettings.brightness > 0 ? '+' : ''}{enhancementSettings.brightness}
@@ -235,7 +230,6 @@ const ProcessingControls = ({ activeTab, onProcess, isProcessing, onSettingsChan
           />
         </div>
 
-        {/* Contrast */}
         <div>
           <label className="block text-sm font-medium text-foreground mb-2">
             Contrast: {enhancementSettings.contrast > 0 ? '+' : ''}{enhancementSettings.contrast}
@@ -250,7 +244,6 @@ const ProcessingControls = ({ activeTab, onProcess, isProcessing, onSettingsChan
           />
         </div>
 
-        {/* Saturation */}
         <div>
           <label className="block text-sm font-medium text-foreground mb-2">
             Saturation: {enhancementSettings.saturation > 0 ? '+' : ''}{enhancementSettings.saturation}
@@ -265,7 +258,6 @@ const ProcessingControls = ({ activeTab, onProcess, isProcessing, onSettingsChan
           />
         </div>
 
-        {/* Sharpness */}
         <div>
           <label className="block text-sm font-medium text-foreground mb-2">
             Sharpness: {enhancementSettings.sharpness > 0 ? '+' : ''}{enhancementSettings.sharpness}
@@ -280,7 +272,6 @@ const ProcessingControls = ({ activeTab, onProcess, isProcessing, onSettingsChan
           />
         </div>
 
-        {/* Gamma / Exposure */}
         <div>
           <label className="block text-sm font-medium text-foreground mb-2">
             Gamma: {enhancementSettings.gamma}
@@ -295,8 +286,6 @@ const ProcessingControls = ({ activeTab, onProcess, isProcessing, onSettingsChan
             className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer slider"
           />
         </div>
-
-        {/* Noise Reduction */}
         <div>
           <label className="block text-sm font-medium text-foreground mb-2">
             Denoise: {enhancementSettings.denoise}
@@ -311,7 +300,6 @@ const ProcessingControls = ({ activeTab, onProcess, isProcessing, onSettingsChan
           />
         </div>
 
-        {/* Temperature */}
         <div>
           <label className="block text-sm font-medium text-foreground mb-2">
             Temperature: {enhancementSettings.temperature}
@@ -337,7 +325,6 @@ const ProcessingControls = ({ activeTab, onProcess, isProcessing, onSettingsChan
         >
           Reset All
         </Button>
-        {/* Auto Enhance */}
         <Button
           variant="ghost"
           size="sm"
