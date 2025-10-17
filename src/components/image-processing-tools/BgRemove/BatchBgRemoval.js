@@ -29,7 +29,7 @@ const BatchImageProcessor = ({ userTier = 'free' }) => {
       name: file.name,
       size: file.size,
       preview: URL.createObjectURL(file),
-      status: 'pending', // pending, processing, completed, failed
+      status: 'pending',
       processedUrl: null,
       error: null,
       progress: 0
@@ -58,7 +58,6 @@ const BatchImageProcessor = ({ userTier = 'free' }) => {
         i === index ? { ...img, status: 'processing', progress: 0 } : img
       ));
 
-      // Simulate progress
       const progressInterval = setInterval(() => {
         setImageQueue(prev => prev.map((img, i) => 
           i === index && img.progress < 90 
@@ -175,7 +174,6 @@ const BatchImageProcessor = ({ userTier = 'free' }) => {
 
   return (
     <div className="w-full max-w-6xl mx-auto p-6 space-y-6">
-      {/* Header */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -193,7 +191,6 @@ const BatchImageProcessor = ({ userTier = 'free' }) => {
           )}
         </div>
 
-        {/* Upload Area */}
         <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-500 transition-colors">
           <input
             ref={fileInputRef}
@@ -223,7 +220,6 @@ const BatchImageProcessor = ({ userTier = 'free' }) => {
         </div>
       </div>
 
-      {/* Stats */}
       {imageQueue.length > 0 && (
         <div className="grid grid-cols-4 gap-4">
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
@@ -245,7 +241,6 @@ const BatchImageProcessor = ({ userTier = 'free' }) => {
         </div>
       )}
 
-      {/* Controls */}
       {imageQueue.length > 0 && (
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
           <div className="flex items-center justify-between">
@@ -298,7 +293,6 @@ const BatchImageProcessor = ({ userTier = 'free' }) => {
         </div>
       )}
 
-      {/* Image Queue */}
       {imageQueue.length > 0 && (
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Image Queue</h3>
@@ -389,7 +383,6 @@ const BatchImageProcessor = ({ userTier = 'free' }) => {
         </div>
       )}
 
-      {/* Empty State */}
       {imageQueue.length === 0 && (
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
           <Upload className="w-16 h-16 text-gray-300 mx-auto mb-4" />
