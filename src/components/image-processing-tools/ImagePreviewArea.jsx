@@ -33,7 +33,6 @@ const ImagePreviewArea = ({ originalImage, processedImage, isProcessing, onDownl
 
   return (
     <div className="w-full space-y-4">
-      {/* Preview Controls */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <Button
@@ -96,10 +95,8 @@ const ImagePreviewArea = ({ originalImage, processedImage, isProcessing, onDownl
         </div>
       </div>
 
-      {/* Preview Area */}
       <div className="bg-card border border-border rounded-lg overflow-hidden">
         {showComparison && originalImage && processedImage ? (
-          // Comparison View
           <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-border">
             <div className="p-4 space-y-2">
               <h4 className="text-sm font-medium text-foreground">Original</h4>
@@ -141,7 +138,6 @@ const ImagePreviewArea = ({ originalImage, processedImage, isProcessing, onDownl
             </div>
           </div>
         ) : (
-          // Single View
           <div className="p-4">
             <div className="relative bg-muted rounded overflow-hidden" style={{ height: '400px' }}>
               {isProcessing ? (
@@ -167,7 +163,6 @@ const ImagePreviewArea = ({ originalImage, processedImage, isProcessing, onDownl
         )}
       </div>
 
-      {/* Image Info */}
       {(originalImage || processedImage) && (
         <div className="bg-muted/50 rounded-lg p-3">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
