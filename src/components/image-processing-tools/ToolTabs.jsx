@@ -32,7 +32,6 @@ const ToolTabs = ({ activeTab, onTabChange }) => {
 
   return (
     <div className="w-full">
-      {/* Mobile Tab Selector */}
       <div className="lg:hidden mb-6">
         <select
           value={activeTab}
@@ -46,7 +45,6 @@ const ToolTabs = ({ activeTab, onTabChange }) => {
           ))}
         </select>
       </div>
-      {/* Desktop Tab Navigation */}
       <div className="hidden lg:block">
         <div className="border-b border-border">
           <nav className="flex space-x-8" aria-label="Tool tabs">
@@ -70,7 +68,6 @@ const ToolTabs = ({ activeTab, onTabChange }) => {
                   <span>{tab?.label}</span>
                 </div>
                 
-                {/* Tooltip */}
                 <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-2 bg-popover border border-border rounded-lg shadow-floating text-xs text-foreground opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 whitespace-nowrap">
                   {tab?.description}
                   <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-popover border-l border-t border-border rotate-45"></div>
@@ -80,7 +77,6 @@ const ToolTabs = ({ activeTab, onTabChange }) => {
           </nav>
         </div>
       </div>
-      {/* Tab Content Header */}
       <div className="mt-6 mb-4">
         {tabs?.map((tab) => (
           activeTab === tab?.id && (
