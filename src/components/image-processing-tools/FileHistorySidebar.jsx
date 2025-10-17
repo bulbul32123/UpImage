@@ -124,14 +124,11 @@ const FileHistorySidebar = ({ isOpen, onToggle, onFileSelect }) => {
 
   return (
     <>
-      {/* Overlay */}
       <div 
         className="fixed inset-0 bg-black/20 z-40 lg:hidden"
         onClick={onToggle}
       />
-      {/* Sidebar */}
       <div className="fixed right-0 top-0 h-full w-80 bg-card border-l border-border shadow-floating z-50 flex flex-col">
-        {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-border">
           <h3 className="text-lg font-semibold text-foreground">File History</h3>
           <Button
@@ -143,7 +140,6 @@ const FileHistorySidebar = ({ isOpen, onToggle, onFileSelect }) => {
           </Button>
         </div>
 
-        {/* Filter Tabs */}
         <div className="p-4 border-b border-border">
           <div className="space-y-1">
             {filterOptions?.map((option) => (
@@ -169,7 +165,6 @@ const FileHistorySidebar = ({ isOpen, onToggle, onFileSelect }) => {
           </div>
         </div>
 
-        {/* File List */}
         <div className="flex-1 overflow-y-auto">
           {filteredFiles?.length > 0 ? (
             <div className="p-4 space-y-3">
@@ -244,7 +239,6 @@ const FileHistorySidebar = ({ isOpen, onToggle, onFileSelect }) => {
           )}
         </div>
 
-        {/* Footer */}
         <div className="p-4 border-t border-border">
           <div className="flex items-center justify-between text-xs text-muted-foreground">
             <span>{filteredFiles?.length} files</span>
