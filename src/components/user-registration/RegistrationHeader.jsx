@@ -9,7 +9,6 @@ const RegistrationHeader = () => {
     <header className="bg-background border-b border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
           <Link to="/dashboard-overview" className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
               <Icon name="Wrench" size={20} color="white" />
@@ -19,7 +18,6 @@ const RegistrationHeader = () => {
             </span>
           </Link>
 
-          {/* Sign In Link */}
           <div className="flex items-center space-x-4">
             <span className="text-sm text-muted-foreground hidden sm:inline">
               Already have an account?
@@ -30,7 +28,6 @@ const RegistrationHeader = () => {
               iconName="LogIn"
               iconPosition="left"
               onClick={() => {
-                // Navigate to sign in page
                 console.log('Navigate to sign in');
               }}
             >
