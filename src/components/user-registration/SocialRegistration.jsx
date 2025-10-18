@@ -27,12 +27,10 @@ const SocialRegistration = () => {
     setLoadingProvider(provider?.name);
 
     try {
-      // Simulate social login API call
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       console.log(`${provider?.name} registration successful`);
       
-      // Redirect to dashboard
       navigate('/dashboard-overview');
     } catch (error) {
       console.error(`${provider?.name} registration failed:`, error);
