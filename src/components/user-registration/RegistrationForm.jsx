@@ -79,7 +79,6 @@ const RegistrationForm = () => {
       [name]: value
     }));
 
-    // Validate field if it has been touched
     if (touchedFields?.[name]) {
       validateField(name, value);
     }
@@ -97,14 +96,12 @@ const RegistrationForm = () => {
   const handleSubmit = async (e) => {
     e?.preventDefault();
     
-    // Mark all fields as touched
     const allTouched = Object.keys(formData)?.reduce((acc, key) => {
       acc[key] = true;
       return acc;
     }, {});
     setTouchedFields(allTouched);
 
-    // Validate all fields
     let isValid = true;
     Object.keys(formData)?.forEach(key => {
       if (!validateField(key, formData?.[key])) {
@@ -117,13 +114,10 @@ const RegistrationForm = () => {
     setIsLoading(true);
 
     try {
-      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 2000));
       
-      // Mock successful registration
       console.log('Registration successful:', formData);
       
-      // Redirect to dashboard
       navigate('/dashboard-overview');
     } catch (error) {
       setErrors({ submit: 'Registration failed. Please try again.' });
