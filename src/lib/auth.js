@@ -1,4 +1,3 @@
-// lib/auth.ts
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 import { NextRequest } from 'next/server';
@@ -31,7 +30,7 @@ export async function setAuthCookie(token){
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
-    maxAge: 60 * 60 * 24 * 7, // 7 days
+    maxAge: 60 * 60 * 24 * 7, 
     path: '/'
   });
 }
@@ -56,7 +55,6 @@ export async function verifyAuth(request) {
       };
     }
 
-    // Verify token
     const decoded = verifyToken(token);
 
     if (!decoded || !decoded.userId) {
@@ -170,10 +168,8 @@ export async function refreshAuthToken(){
       };
     }
 
-    // Generate new token
     const newToken = generateToken(decoded.userId);
 
-    // Set new cookie
     await setAuthCookie(newToken);
 
     return {
