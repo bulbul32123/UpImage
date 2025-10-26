@@ -1,4 +1,4 @@
-
+// /api/profile/update/route.js
 import { NextRequest, NextResponse } from "next/server";
 import User from "@/models/User";
 import { verifyAuth } from "@/lib/auth";
