@@ -9,6 +9,7 @@ import Image from "next/image";
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const { user, formData, signOut, loading } = useAuth();
   const tempUserPlan = true;
 
@@ -40,6 +41,24 @@ const Header = () => {
   const toggleMobileMenu = useCallback(() => setIsMobileMenuOpen(prev => !prev), []);
   const toggleProfileDropdown = useCallback(() => setIsProfileDropdownOpen(prev => !prev), []);
   const closeMobileMenu = useCallback(() => setIsMobileMenuOpen(false), []);
+
+  // Get user initials for fallback avatar
+  const getUserInitials = useCallback(() => {
+    if (!user?.name) return "U";
+    const names = user.name.trim().split(" ");
+    if (names.length === 1) return names[0].charAt(0).toUpperCase();
+    return (names[0].charAt(0)).toUpperCase();
+  }, [user?.name]);
+
+  // Check if profile image exists and is valid
+  const hasValidProfileImage = useMemo(() => {
+    return formData?.profileImage && !imageError && formData.profileImage.trim() !== "";
+  }, [formData?.profileImage, imageError]);
+
+  // Reset image error when profile image changes
+  React.useEffect(() => {
+    setImageError(false);
+  }, [formData?.profileImage]);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-card border-b border-border shadow-resting">
@@ -84,6 +103,7 @@ const Header = () => {
           {/* Profile Dropdown */}
           <div className="relative pr-8">
             {loading ? (
+              // Loading state
               <div className="w-10 h-10 bg-gray-300 rounded-full animate-pulse" />
             ) : user ? (
               <Button
@@ -93,14 +113,25 @@ const Header = () => {
                 aria-label="User menu"
                 className="w-11 h-11 flex gap-0.5 items-start p-0"
               >
-                <Image
-                  src={formData?.profileImage}
-                  alt="Profile"
-                  width={100}
-                  height={100}
-                  className="w-full h-full object-cover rounded-full"
-                  priority
-                />
+                {hasValidProfileImage ? (
+                  // Show profile image if available
+                  <Image
+                    src={formData.profileImage}
+                    alt="Profile"
+                    width={100}
+                    height={100}
+                    className="w-full h-full object-cover rounded-full"
+                    onError={() => setImageError(true)}
+                    priority
+                  />
+                ) : (
+                  // Fallback to initials avatar
+                  <div className="px-[1.2rem] py-[0.8rem] bg-black rounded-full flex items-center justify-center">
+                    <span className="text-white font-bold">
+                      {getUserInitials()}
+                    </span>
+                  </div>
+                )}
                 {tempUserPlan && (
                   <span className="bg-[#ECFF79] border select-none text-black text-[9px] px-2 py-0.5 rounded-full shadow-sm">
                     PRO
@@ -108,6 +139,7 @@ const Header = () => {
                 )}
               </Button>
             ) : (
+              // Not logged in - show sign in button
               <Link
                 href="/auth/signin"
                 className="rounded-full"
@@ -123,8 +155,28 @@ const Header = () => {
             {isProfileDropdownOpen && user && (
               <div className="absolute right-0 mt-2 w-56 bg-popover border border-border rounded-lg shadow-floating z-60">
                 <div className="p-3 border-b border-border">
-                  <p className="text-sm font-medium text-black">{user?.name}</p>
-                  <p className="text-xs text-gray-600">{user?.email}</p>
+                  <div className="flex items-center space-x-3 mb-2">
+                    {hasValidProfileImage ? (
+                      <Image
+                        src={formData.profileImage}
+                        alt="Profile"
+                        width={40}
+                        height={40}
+                        className="w-10 h-10 object-cover rounded-full"
+                        onError={() => setImageError(true)}
+                      />
+                    ) : (
+                      <div className="w-10 h-10 bg-black rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="text-white text-sm font-semibold">
+                          {getUserInitials()}
+                        </span>
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-black truncate">{user?.name}</p>
+                      <p className="text-xs text-gray-600 truncate">{user?.email}</p>
+                    </div>
+                  </div>
                 </div>
                 <div className="py-1">
                   {profileMenuItems?.map((item) => (
