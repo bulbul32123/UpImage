@@ -1,7 +1,5 @@
-
 "use client";
-import React, { useMemo } from "react";
-import { useCallback } from "react";
+import React, { useMemo, useState, useCallback } from "react";
 import Icon from "../AppIcon";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -12,6 +10,7 @@ import Image from "next/image";
 export default function UserSideBar() {
     const pathname = usePathname();
     const { user, formData, loading } = useAuth();
+    const [imageError, setImageError] = useState(false);
     const basePath = "/user-profile-management";
     const tempUserPlan = true;
 
@@ -29,24 +28,46 @@ export default function UserSideBar() {
         [pathname]
     );
 
+    // Get user initials for fallback avatar
+    const getUserInitials = useCallback(() => {
+        if (!user?.name) return "U";
+        const names = user.name.trim().split(" ");
+        if (names.length === 1) return names[0].charAt(0).toUpperCase();
+        return (names[0].charAt(0) + names[names.length - 1].charAt(0)).toUpperCase();
+    }, [user?.name]);
+
+    // Check if profile image exists and is valid
+    const hasValidProfileImage = useMemo(() => {
+        return formData?.profileImage && !imageError && formData.profileImage.trim() !== "";
+    }, [formData?.profileImage, imageError]);
+
+    // Reset image error when profile image changes
+    React.useEffect(() => {
+        setImageError(false);
+    }, [formData?.profileImage]);
 
     return (
         <div className="col-span-1 lg:col-span-1 max-md:hidden">
             <div className="bg-card rounded-lg border border-border shadow-resting p-6 sticky top-20">
                 <div className="flex items-center space-x-3 mb-6">
                     <div className="w-12 h-12 rounded-full flex items-center justify-center overflow-hidden">
-                        {!loading ? (
+                        {loading ? (
+                            <div className="w-full h-full bg-gray-200 rounded-full animate-pulse" />
+                        ) : hasValidProfileImage ? (
                             <Image
-                                src={formData?.profileImage}
+                                src={formData.profileImage}
                                 alt="Profile"
                                 width={100}
                                 height={100}
                                 className="w-full h-full object-cover rounded-full"
+                                onError={() => setImageError(true)}
                                 priority
                             />
                         ) : (
-                            <div className="w-full h-full bg-gray-200 flex items-center rounded-full justify-center animate-pulse">
-                                <Icon name="User" size={22} color="var(--color-muted-foreground)" />
+                            <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                                <span className="text-white text-sm font-semibold">
+                                    {getUserInitials()}
+                                </span>
                             </div>
                         )}
                     </div>
@@ -70,8 +91,8 @@ export default function UserSideBar() {
                                 href={`${basePath}/${tab.id}`}
                                 key={tab.id}
                                 className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg transition-colors ${active
-                                        ? "bg-primary text-primary-foreground"
-                                        : "bg-white text-black hover:bg-muted"
+                                    ? "bg-primary text-primary-foreground"
+                                    : "bg-white text-black hover:bg-muted"
                                     }`}
                             >
                                 <Icon
