@@ -29,14 +29,15 @@ export const AuthProvider = ({ children }) => {
             if (data.success) {
                 setUser(data.user);
                 setFormData({
-                    name: data.user.name,
-                    email: data.user.email,
-                    profileImage: data.user.profileImage,
+                    name: data.user.name || "",
+                    email: data.user.email || "",
+                    profileImage: data.user.profileImage || "",
                 });
             }
         } catch (err) {
             console.error("Fetch user error:", err);
             setUser(null);
+            setFormData({ name: "", email: "", profileImage: "" });
         } finally {
             setLoading(false);
         }
@@ -51,12 +52,19 @@ export const AuthProvider = ({ children }) => {
             try {
                 const { data } = await api.post("/auth/signin", credentials);
                 if (data.success) {
+                    // Set initial user data from sign-in response
                     setUser(data.user);
                     setFormData({
-                        name: data.user.name,
-                        email: data.user.email,
-                        profileImage: data.user.profileImage,
+                        name: data.user.name || "",
+                        email: data.user.email || "",
+                        profileImage: data.user.profileImage || "",
                     });
+                    
+                    // Fetch complete user data to ensure we have the latest profile image
+                    // This is done asynchronously without blocking the sign-in flow
+                    setTimeout(() => {
+                        fetchUser();
+                    }, 100);
                 }
                 return data;
             } catch (error) {
@@ -64,7 +72,7 @@ export const AuthProvider = ({ children }) => {
                 throw error;
             }
         },
-        []
+        [fetchUser]
     );
 
     const signOut = useCallback(async () => {
@@ -135,9 +143,9 @@ export const AuthProvider = ({ children }) => {
                 if (response.data.success) {
                     setUser(response.data.user);
                     setFormData({
-                        name: response.data.user.name,
-                        email: response.data.user.email,
-                        profileImage: response.data.user.profileImage,
+                        name: response.data.user.name || "",
+                        email: response.data.user.email || "",
+                        profileImage: response.data.user.profileImage || "",
                     });
                     return { success: true };
                 }
