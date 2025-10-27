@@ -79,7 +79,6 @@ const ChatInterface = ({ selectedFile, onSendMessage }) => {
     setInputMessage('');
     setIsTyping(true);
 
-    // Simulate AI response
     setTimeout(() => {
       const responses = [
         `Based on the PDF content, I can help you with that. Let me analyze the relevant sections and provide you with a detailed response.\n\nThe document contains information that directly addresses your question about "${message?.trim()}".`,
@@ -121,7 +120,6 @@ const ChatInterface = ({ selectedFile, onSendMessage }) => {
 
   return (
     <div className="h-full flex flex-col bg-card">
-      {/* Header */}
       <div className="p-4 border-b border-border">
         <div className="flex items-center justify-between">
           <div>
@@ -143,7 +141,6 @@ const ChatInterface = ({ selectedFile, onSendMessage }) => {
         </div>
       </div>
       {!selectedFile ? (
-        /* No File Selected State */
         (<div className="flex-1 flex items-center justify-center p-8">
           <div className="text-center max-w-sm">
             <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
@@ -164,7 +161,6 @@ const ChatInterface = ({ selectedFile, onSendMessage }) => {
         </div>)
       ) : (
         <>
-          {/* Messages Area */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
             {messages?.length === 0 && (
               <div className="text-center py-8">
@@ -239,7 +235,6 @@ const ChatInterface = ({ selectedFile, onSendMessage }) => {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input Area */}
           <div className="p-4 border-t border-border">
             <div className="flex items-end space-x-2">
               <div className="flex-1">
