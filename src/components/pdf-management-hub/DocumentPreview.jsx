@@ -8,7 +8,6 @@ const DocumentPreview = ({ selectedFile, onClose }) => {
   const [zoomLevel, setZoomLevel] = useState(100);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  // Mock PDF data
   const totalPages = 12;
   const mockPdfUrl = "https://images.unsplash.com/photo-1568667256549-094345857637?w=800&h=1000&fit=crop";
 
@@ -75,7 +74,6 @@ const DocumentPreview = ({ selectedFile, onClose }) => {
 
   return (
     <div className={`h-full flex flex-col bg-card ${isFullscreen ? 'fixed inset-0 z-50' : 'border-l border-border'}`}>
-      {/* Header */}
       <div className="p-4 border-b border-border">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
@@ -113,10 +111,8 @@ const DocumentPreview = ({ selectedFile, onClose }) => {
           </div>
         </div>
       </div>
-      {/* Toolbar */}
       <div className="p-3 border-b border-border">
         <div className="flex items-center justify-between">
-          {/* Page Navigation */}
           <div className="flex items-center space-x-2">
             <Button
               variant="outline"
@@ -145,7 +141,6 @@ const DocumentPreview = ({ selectedFile, onClose }) => {
             />
           </div>
 
-          {/* Zoom Controls */}
           <div className="flex items-center space-x-2">
             <Button
               variant="outline"
@@ -174,7 +169,6 @@ const DocumentPreview = ({ selectedFile, onClose }) => {
             </Button>
           </div>
 
-          {/* Actions */}
           <div className="flex items-center space-x-1">
             <Button variant="outline" size="sm" iconName="RotateCw" />
             <Button variant="outline" size="sm" iconName="Download" />
@@ -182,7 +176,6 @@ const DocumentPreview = ({ selectedFile, onClose }) => {
           </div>
         </div>
       </div>
-      {/* Document Viewer */}
       <div className="flex-1 overflow-auto bg-muted/30 p-4">
         <div className="flex justify-center">
           <div 
@@ -193,7 +186,6 @@ const DocumentPreview = ({ selectedFile, onClose }) => {
             }}
           >
             <div className="w-[595px] h-[842px] relative">
-              {/* Mock PDF Page */}
               <div className="absolute inset-0 p-8 text-gray-800 text-sm leading-relaxed">
                 <div className="text-center mb-6">
                   <h1 className="text-2xl font-bold mb-2">Business Proposal</h1>
@@ -240,7 +232,6 @@ const DocumentPreview = ({ selectedFile, onClose }) => {
           </div>
         </div>
       </div>
-      {/* Status Bar */}
       <div className="p-2 border-t border-border bg-muted/30">
         <div className="flex items-center justify-between text-xs text-muted-foreground">
           <div className="flex items-center space-x-4">
