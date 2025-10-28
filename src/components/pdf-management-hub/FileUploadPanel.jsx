@@ -10,14 +10,12 @@ const FileUploadPanel = ({ onFileUpload, uploadedFiles = [], onFileSelect }) => 
   const [uploadingFiles, setUploadingFiles] = useState([]);
 
   const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
-    // Handle rejected files
     if (rejectedFiles?.length > 0) {
       rejectedFiles?.forEach(file => {
         console.error(`File ${file?.file?.name} rejected:`, file?.errors);
       });
     }
 
-    // Process accepted files
     if (acceptedFiles?.length > 0) {
       const newFiles = acceptedFiles?.map(file => ({
         id: `file-${Date.now()}-${Math.random()?.toString(36)?.substr(2, 9)}`,
@@ -38,7 +36,7 @@ const FileUploadPanel = ({ onFileUpload, uploadedFiles = [], onFileSelect }) => 
     accept: {
       'application/pdf': ['.pdf']
     },
-    maxSize: 50 * 1024 * 1024, // 50MB
+    maxSize: 50 * 1024 * 1024,
     multiple: true,
     onDragEnter: () => setDragActive(true),
     onDragLeave: () => setDragActive(false)
@@ -75,12 +73,10 @@ const FileUploadPanel = ({ onFileUpload, uploadedFiles = [], onFileSelect }) => 
 
   return (
     <div className="h-full flex flex-col bg-card border-r border-border">
-      {/* Header */}
       <div className="p-4 border-b border-border">
         <h2 className="text-lg font-semibold text-foreground mb-1">PDF Files</h2>
         <p className="text-sm text-muted-foreground">Upload and manage your PDF documents</p>
       </div>
-      {/* Upload Zone */}
       <div className="p-4">
         <div
           {...getRootProps()}
@@ -111,7 +107,6 @@ const FileUploadPanel = ({ onFileUpload, uploadedFiles = [], onFileSelect }) => 
           </div>
         </div>
       </div>
-      {/* Upload Progress */}
       {uploadingFiles?.length > 0 && (
         <div className="px-4 pb-4">
           <FileUploadProgress
@@ -122,7 +117,6 @@ const FileUploadPanel = ({ onFileUpload, uploadedFiles = [], onFileSelect }) => 
           />
         </div>
       )}
-      {/* File List */}
       <div className="flex-1 overflow-y-auto">
         <div className="p-4">
           <div className="flex items-center justify-between mb-3">
@@ -171,7 +165,6 @@ const FileUploadPanel = ({ onFileUpload, uploadedFiles = [], onFileSelect }) => 
           )}
         </div>
       </div>
-      {/* Quick Actions */}
       <div className="p-4 border-t border-border">
         <div className="grid grid-cols-2 gap-2">
           <Button variant="outline" size="sm" iconName="FolderOpen" iconPosition="left">
