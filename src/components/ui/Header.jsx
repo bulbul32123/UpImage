@@ -42,7 +42,6 @@ const Header = () => {
   const toggleProfileDropdown = useCallback(() => setIsProfileDropdownOpen(prev => !prev), []);
   const closeMobileMenu = useCallback(() => setIsMobileMenuOpen(false), []);
 
-  // Get user initials for fallback avatar
   const getUserInitials = useCallback(() => {
     if (!user?.name) return "U";
     const names = user.name.trim().split(" ");
@@ -50,12 +49,10 @@ const Header = () => {
     return (names[0].charAt(0)).toUpperCase();
   }, [user?.name]);
 
-  // Check if profile image exists and is valid
   const hasValidProfileImage = useMemo(() => {
     return formData?.profileImage && !imageError && formData.profileImage.trim() !== "";
   }, [formData?.profileImage, imageError]);
 
-  // Reset image error when profile image changes
   React.useEffect(() => {
     setImageError(false);
   }, [formData?.profileImage]);
@@ -63,7 +60,6 @@ const Header = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-card border-b border-border shadow-resting">
       <div className="flex items-center justify-between h-16 px-4 lg:px-6">
-        {/* Logo */}
         <Link href="/dashboard-overview" className="flex items-center space-x-2 flex-shrink-0">
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
             <Icon name="Wrench" size={20} color="white" />
@@ -73,7 +69,6 @@ const Header = () => {
           </span>
         </Link>
 
-        {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-1">
           {navigationItems?.map((item) => (
             <Link
@@ -87,9 +82,7 @@ const Header = () => {
           ))}
         </nav>
 
-        {/* Right Side Actions */}
         <div className="flex items-center space-x-3">
-          {/* Mobile Menu Button */}
           <Button
             variant="ghost"
             size="icon"
@@ -100,10 +93,8 @@ const Header = () => {
             <Icon name={isMobileMenuOpen ? "X" : "Menu"} size={20} />
           </Button>
 
-          {/* Profile Dropdown */}
           <div className="relative pr-8">
             {loading ? (
-              // Loading state
               <div className="w-10 h-10 bg-gray-300 rounded-full animate-pulse" />
             ) : user ? (
               <Button
@@ -114,7 +105,6 @@ const Header = () => {
                 className="w-11 h-11 flex gap-0.5 items-start p-0"
               >
                 {hasValidProfileImage ? (
-                  // Show profile image if available
                   <Image
                     src={formData.profileImage}
                     alt="Profile"
@@ -125,7 +115,6 @@ const Header = () => {
                     priority
                   />
                 ) : (
-                  // Fallback to initials avatar
                   <div className="px-[1.2rem] py-[0.8rem] bg-black rounded-full flex items-center justify-center">
                     <span className="text-white font-bold">
                       {getUserInitials()}
@@ -139,7 +128,6 @@ const Header = () => {
                 )}
               </Button>
             ) : (
-              // Not logged in - show sign in button
               <Link
                 href="/auth/signin"
                 className="rounded-full"
@@ -151,7 +139,6 @@ const Header = () => {
               </Link>
             )}
 
-            {/* Profile Dropdown Menu */}
             {isProfileDropdownOpen && user && (
               <div className="absolute right-0 mt-2 w-56 bg-popover border border-border rounded-lg shadow-floating z-60">
                 <div className="p-3 border-b border-border">
@@ -205,7 +192,6 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Mobile Navigation Menu */}
       {isMobileMenuOpen && (
         <div className="lg:hidden bg-card border-t border-border shadow-elevated">
           <nav className="px-4 py-3 space-y-1">
@@ -224,7 +210,6 @@ const Header = () => {
         </div>
       )}
 
-      {/* Overlay for mobile menu */}
       {isMobileMenuOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-25 z-40 lg:hidden"
@@ -232,7 +217,6 @@ const Header = () => {
         />
       )}
 
-      {/* Overlay for profile dropdown */}
       {isProfileDropdownOpen && (
         <div
           className="fixed inset-0 z-50"
