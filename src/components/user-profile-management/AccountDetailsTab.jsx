@@ -225,7 +225,6 @@ const AccountDetailsTab = ({ user: initialUser }) => {
         </div>
       </div>
 
-      {/* Personal Information */}
       <div className="bg-card rounded-lg p-6 border border-border shadow-resting">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-semibold text-foreground">Personal Information</h3>
@@ -268,7 +267,6 @@ const AccountDetailsTab = ({ user: initialUser }) => {
         </div>
       </div>
 
-      {/* Notification Preferences */}
       <div className="bg-card rounded-lg p-6 border border-border shadow-resting">
         <h3 className="text-lg font-semibold text-foreground mb-6">Notification Preferences</h3>
         <div className="space-y-4">
