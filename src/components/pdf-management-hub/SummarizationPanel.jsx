@@ -32,7 +32,6 @@ const SummarizationPanel = ({ selectedFile, onGenerateSummary }) => {
 
     setIsGenerating(true);
     
-    // Simulate API call
     setTimeout(() => {
       const summary = {
         id: Date.now(),
@@ -53,10 +52,8 @@ const SummarizationPanel = ({ selectedFile, onGenerateSummary }) => {
   const handleExportSummary = (format) => {
     if (!generatedSummary) return;
     
-    // Mock export functionality
     console.log(`Exporting summary as ${format}:`, generatedSummary);
     
-    // Create and download file
     const content = `Summary of ${generatedSummary?.fileName}\n\nGenerated: ${generatedSummary?.generatedAt?.toLocaleString()}\nType: ${summaryOptions?.find(opt => opt?.value === generatedSummary?.type)?.label}\n\n${generatedSummary?.content}`;
     const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
@@ -78,7 +75,6 @@ const SummarizationPanel = ({ selectedFile, onGenerateSummary }) => {
 
   return (
     <div className="h-full flex flex-col bg-card">
-      {/* Header */}
       <div className="p-4 border-b border-border">
         <h2 className="text-lg font-semibold text-foreground mb-1">Document Summary</h2>
         <p className="text-sm text-muted-foreground">
@@ -86,7 +82,6 @@ const SummarizationPanel = ({ selectedFile, onGenerateSummary }) => {
         </p>
       </div>
       {!selectedFile ? (
-        /* No File Selected State */
         (<div className="flex-1 flex items-center justify-center p-8">
           <div className="text-center max-w-sm">
             <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
@@ -118,7 +113,6 @@ const SummarizationPanel = ({ selectedFile, onGenerateSummary }) => {
         </div>)
       ) : (
         <>
-          {/* Summary Configuration */}
           <div className="p-4 space-y-4">
             <div>
               <label className="block text-sm font-medium text-foreground mb-2">
@@ -154,7 +148,6 @@ const SummarizationPanel = ({ selectedFile, onGenerateSummary }) => {
             </Button>
           </div>
 
-          {/* Generated Summary */}
           {(generatedSummary || isGenerating) && (
             <div className="flex-1 overflow-y-auto">
               <div className="p-4">
@@ -176,7 +169,6 @@ const SummarizationPanel = ({ selectedFile, onGenerateSummary }) => {
                     </div>
                   ) : generatedSummary && (
                     <>
-                      {/* Summary Header */}
                       <div className="p-4 border-b border-border">
                         <div className="flex items-center justify-between mb-2">
                           <h3 className="text-sm font-medium text-foreground">
@@ -194,7 +186,6 @@ const SummarizationPanel = ({ selectedFile, onGenerateSummary }) => {
                         </p>
                       </div>
 
-                      {/* Summary Content */}
                       <div className="p-4">
                         <div className="prose prose-sm max-w-none">
                           <div className="whitespace-pre-wrap text-sm text-foreground leading-relaxed">
@@ -203,7 +194,6 @@ const SummarizationPanel = ({ selectedFile, onGenerateSummary }) => {
                         </div>
                       </div>
 
-                      {/* Export Actions */}
                       <div className="p-4 border-t border-border">
                         <div className="flex items-center justify-between mb-3">
                           <span className="text-sm font-medium text-foreground">Export Summary</span>
@@ -259,7 +249,6 @@ const SummarizationPanel = ({ selectedFile, onGenerateSummary }) => {
             </div>
           )}
 
-          {/* Summary History */}
           {summaryHistory?.length > 0 && !isGenerating && (
             <div className="border-t border-border">
               <div className="p-4">
