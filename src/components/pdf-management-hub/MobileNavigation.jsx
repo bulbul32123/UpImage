@@ -45,7 +45,6 @@ const MobileNavigation = ({ activePanel, onPanelChange, selectedFile, hasMessage
 
   return (
     <>
-      {/* Mobile Bottom Navigation */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-card border-t border-border shadow-floating">
         <div className="flex items-center justify-around p-2">
           {panels?.map((panel) => (
@@ -68,7 +67,6 @@ const MobileNavigation = ({ activePanel, onPanelChange, selectedFile, hasMessage
               />
               <span className="text-xs font-medium">{panel?.label}</span>
               
-              {/* Badge */}
               {panel?.badge && (
                 <div className={`absolute -top-1 -right-1 w-3 h-3 rounded-full ${
                   panel?.badge === 'active' ? 'bg-success' : 
@@ -83,7 +81,6 @@ const MobileNavigation = ({ activePanel, onPanelChange, selectedFile, hasMessage
           ))}
         </div>
       </div>
-      {/* Mobile Panel Header */}
       <div className="lg:hidden bg-card border-b border-border p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
@@ -110,7 +107,6 @@ const MobileNavigation = ({ activePanel, onPanelChange, selectedFile, hasMessage
             </div>
           </div>
 
-          {/* Quick Actions */}
           <div className="flex items-center space-x-2">
             {selectedFile && (
               <>
@@ -149,7 +145,6 @@ const MobileNavigation = ({ activePanel, onPanelChange, selectedFile, hasMessage
           </div>
         </div>
 
-        {/* Progress Indicator */}
         <div className="mt-3">
           <div className="flex items-center space-x-1">
             {panels?.map((panel, index) => (
@@ -166,7 +161,6 @@ const MobileNavigation = ({ activePanel, onPanelChange, selectedFile, hasMessage
           </div>
         </div>
       </div>
-      {/* Swipe Indicator */}
       {selectedFile && (
         <div className="lg:hidden fixed bottom-20 left-1/2 transform -translate-x-1/2 z-30">
           <div className="bg-black/50 text-white text-xs px-3 py-1 rounded-full backdrop-blur-sm">
