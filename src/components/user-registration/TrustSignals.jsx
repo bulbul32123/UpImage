@@ -38,7 +38,6 @@ const TrustSignals = () => {
 
   return (
     <div className="space-y-6">
-      {/* Trust Features */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {trustFeatures?.map((feature, index) => (
           <div key={index} className="flex items-center space-x-2 text-center sm:text-left">
@@ -52,14 +51,12 @@ const TrustSignals = () => {
           </div>
         ))}
       </div>
-      {/* Security Badge */}
       <div className="flex items-center justify-center space-x-2 p-3 bg-muted/50 rounded-lg border border-border">
         <Icon name="ShieldCheck" size={20} color="var(--color-success)" />
         <span className="text-sm text-foreground font-medium">
           256-bit SSL Security
         </span>
       </div>
-      {/* Policy Links */}
       <div className="text-center">
         <p className="text-xs text-muted-foreground mb-2">
           By creating an account, you agree to our
@@ -76,7 +73,6 @@ const TrustSignals = () => {
           ))}
         </div>
       </div>
-      {/* Additional Trust Message */}
       <div className="text-center p-4 bg-primary/5 rounded-lg border border-primary/10">
         <div className="flex items-center justify-center space-x-2 mb-2">
           <Icon name="Users" size={16} color="var(--color-primary)" />
