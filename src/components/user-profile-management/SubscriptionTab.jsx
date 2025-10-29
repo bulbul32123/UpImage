@@ -150,7 +150,6 @@ const SubscriptionTab = () => {
 
   return (
     <div className="space-y-8">
-      {/* Current Plan Overview */}
       <div className="bg-card rounded-lg p-6 border border-border shadow-resting">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-semibold text-foreground">Current Plan</h3>
@@ -203,7 +202,6 @@ const SubscriptionTab = () => {
           </div>
         </div>
       </div>
-      {/* Usage Overview */}
       <div className="bg-card rounded-lg p-6 border border-border shadow-resting">
         <h3 className="text-lg font-semibold text-foreground mb-6">Current Usage</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -268,7 +266,6 @@ const SubscriptionTab = () => {
           </div>
         </div>
       </div>
-      {/* Available Plans */}
       <div className="bg-card rounded-lg p-6 border border-border shadow-resting">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-semibold text-foreground">Available Plans</h3>
@@ -344,7 +341,6 @@ const SubscriptionTab = () => {
           ))}
         </div>
       </div>
-      {/* Billing History */}
       <div className="bg-card rounded-lg p-6 border border-border shadow-resting">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-semibold text-foreground">Billing History</h3>
@@ -389,7 +385,6 @@ const SubscriptionTab = () => {
           </table>
         </div>
       </div>
-      {/* Plan Change Modal */}
       {showUpgradeModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-card rounded-lg p-6 max-w-md w-full border border-border shadow-floating">
