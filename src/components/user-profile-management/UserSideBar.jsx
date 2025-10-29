@@ -28,7 +28,6 @@ export default function UserSideBar() {
         [pathname]
     );
 
-    // Get user initials for fallback avatar
     const getUserInitials = useCallback(() => {
         if (!user?.name) return "U";
         const names = user.name.trim().split(" ");
@@ -36,12 +35,10 @@ export default function UserSideBar() {
         return (names[0].charAt(0) + names[names.length - 1].charAt(0)).toUpperCase();
     }, [user?.name]);
 
-    // Check if profile image exists and is valid
     const hasValidProfileImage = useMemo(() => {
         return formData?.profileImage && !imageError && formData.profileImage.trim() !== "";
     }, [formData?.profileImage, imageError]);
 
-    // Reset image error when profile image changes
     React.useEffect(() => {
         setImageError(false);
     }, [formData?.profileImage]);
@@ -106,7 +103,6 @@ export default function UserSideBar() {
                     })}
                 </nav>
 
-                {/* Quick Stats */}
                 <div className="mt-8 pt-6 border-t border-border">
                     <h3 className="text-sm font-medium text-foreground mb-4">
                         Quick Stats
@@ -140,3 +136,34 @@ export default function UserSideBar() {
         </div>
     );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+git add src/components/user-registration/TrustSignals.jsx
+git commit -m "TrustSignals updated" --date="2025-10-29"
+git push -u origin main
+
+git add src/context/AuthContext.js
+git commit -m "AuthContext updated" --date="2025-10-30"
+git push -u origin main
+
