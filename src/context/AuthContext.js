@@ -52,7 +52,6 @@ export const AuthProvider = ({ children }) => {
             try {
                 const { data } = await api.post("/auth/signin", credentials);
                 if (data.success) {
-                    // Set initial user data from sign-in response
                     setUser(data.user);
                     setFormData({
                         name: data.user.name || "",
@@ -60,8 +59,6 @@ export const AuthProvider = ({ children }) => {
                         profileImage: data.user.profileImage || "",
                     });
                     
-                    // Fetch complete user data to ensure we have the latest profile image
-                    // This is done asynchronously without blocking the sign-in flow
                     setTimeout(() => {
                         fetchUser();
                     }, 100);
