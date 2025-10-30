@@ -136,34 +136,3 @@ export default function UserSideBar() {
         </div>
     );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-git add src/components/user-registration/TrustSignals.jsx
-git commit -m "TrustSignals updated" --date="2025-10-29"
-git push -u origin main
-
-git add src/context/AuthContext.js
-git commit -m "AuthContext updated" --date="2025-10-30"
-git push -u origin main
-
