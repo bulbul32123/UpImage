@@ -11,20 +11,17 @@ export async function middleware(request) {
   const isPublicPath = publicPaths.some(path => pathname.startsWith(path));
   const isProtectedPath = protectedPaths.some(path => pathname.startsWith(path));
 
-  // If token exists and user tries to visit public page, redirect to dashboard
   if (token && isPublicPath) {
-    const verified = await verifyToken(token); // <-- await here if verifyToken is async
+    const verified = await verifyToken(token); 
     if (verified) {
       return NextResponse.redirect(new URL('/dashboard', request.url));
     }
   }
 
-  // If no token and user tries to visit protected page, redirect to signin
   if (!token && isProtectedPath) {
     return NextResponse.redirect(new URL('/auth/signin', request.url));
   }
 
-  // If token exists but invalid, redirect to signin
   if (token && isProtectedPath) {
     const verified = await verifyToken(token);
     if (!verified) {
@@ -45,3 +42,4 @@ export const config = {
     '/auth/:path*'
   ]
 };
+
