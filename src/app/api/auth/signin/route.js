@@ -8,16 +8,12 @@ export async function POST(request) {
         await dbConnect();
 
         const { email, password } = await request.json();
-
-        // Validate input
         if (!email || !password) {
             return NextResponse.json(
                 { success: false, message: 'Please provide email and password' },
                 { status: 400 }
             );
         }
-
-        // Find user and include password field
         const user = await User.findOne({ email: email.toLowerCase() }).select('+password');
 
         if (!user) {
@@ -26,8 +22,6 @@ export async function POST(request) {
                 { status: 401 }
             );
         }
-
-        // Check password
         const isPasswordValid = await user.comparePassword(password);
 
         if (!isPasswordValid) {
@@ -36,11 +30,7 @@ export async function POST(request) {
                 { status: 401 }
             );
         }
-
-        // Generate JWT token
         const token = generateToken(user._id.toString());
-
-        // Set HTTP-only cookie
       await  setAuthCookie(token);
         return NextResponse.json({
             success: true,
@@ -51,7 +41,6 @@ export async function POST(request) {
                 name: user.name
             }
         }, { status: 200 });
-
     } catch (error) {
         console.error('Signin error:', error);
 
