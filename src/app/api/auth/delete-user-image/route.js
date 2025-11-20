@@ -1,4 +1,3 @@
-// app/api/delete-image/route.js
 import { v2 as cloudinary } from 'cloudinary';
 import { NextResponse } from 'next/server';
 import { verifyAuth } from '@/lib/auth';
@@ -81,13 +80,10 @@ export async function DELETE(request) {
         }
 
         console.log(`[DELETE IMAGE] User: ${userId}, Public ID: ${publicId}`);
-
-        // Delete from Cloudinary
         const result = await cloudinary.uploader.destroy(publicId, {
-            invalidate: true, // Invalidate CDN cache
+            invalidate: true, 
         });
 
-        // Check if deletion was successful
         if (result.result === 'ok') {
             console.log(`[DELETE IMAGE SUCCESS] Public ID: ${publicId} deleted successfully`);
 
@@ -101,7 +97,6 @@ export async function DELETE(request) {
                 { status: 200 }
             );
         } else if (result.result === 'not found') {
-            // Image already deleted or doesn't exist
             console.warn(`[DELETE IMAGE] Public ID: ${publicId} not found`);
 
             return NextResponse.json(
@@ -127,8 +122,6 @@ export async function DELETE(request) {
         }
     } catch (error) {
         console.error('[DELETE IMAGE EXCEPTION]', error);
-
-        // Handle specific error types
         if (error instanceof SyntaxError) {
             return NextResponse.json(
                 {
@@ -241,7 +234,6 @@ export async function POST(request) {
                 { status: 400 }
             );
         }
-
         return NextResponse.json(
             {
                 success: false,
