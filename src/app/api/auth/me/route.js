@@ -1,4 +1,3 @@
-// /api/auth/me/route.js
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import User from '@/models/User';
@@ -24,6 +23,7 @@ export async function GET(request) {
       );
     }
 
+    console.log("auth me",user);
     return NextResponse.json({
       success: true,
       user: { ...user._doc }
