@@ -1,4 +1,3 @@
-// /api/profile/update/route.js
 import { NextRequest, NextResponse } from "next/server";
 import User from "@/models/User";
 import { verifyAuth } from "@/lib/auth";
@@ -13,7 +12,6 @@ export async function PATCH(request) {
         { status: 401 }
       );
     }
-
     const { name, email, profileImage } = await request.json();
     const userId = authResult.userId;
 
@@ -23,7 +21,6 @@ export async function PATCH(request) {
         { status: 400 }
       );
     }
-
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { name, email, profileImage },
