@@ -3,9 +3,7 @@ import { removeAuthCookie } from '@/lib/auth';
 
 export async function POST(request) {
   try {
-    // Remove auth cookie
     await removeAuthCookie();
-    
     return NextResponse.json({
       success: true,
       message: 'Signed out successfully'
