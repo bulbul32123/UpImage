@@ -8,16 +8,12 @@ export async function POST(request) {
         await dbConnect();
 
         const { email, password, name } = await request.json();
-
-        // Validate input
         if (!email || !password || !name) {
             return NextResponse.json(
                 { success: false, message: 'Please provide all required fields' },
                 { status: 400 }
             );
         }
-
-        // Validate email format
         const emailRegex = /^\S+@\S+\.\S+$/;
         if (!emailRegex.test(email)) {
             return NextResponse.json(
@@ -25,8 +21,6 @@ export async function POST(request) {
                 { status: 400 }
             );
         }
-
-        // Validate password strength
         const passwordValidation = validatePassword(password);
         if (!passwordValidation.isValid) {
             return NextResponse.json(
@@ -38,8 +32,6 @@ export async function POST(request) {
                 { status: 400 }
             );
         }
-
-        // Check if user already exists
         const existingUser = await User.findOne({ email: email.toLowerCase() });
         if (existingUser) {
             return NextResponse.json(
@@ -47,16 +39,12 @@ export async function POST(request) {
                 { status: 409 }
             );
         }
-
-        // Create new user
         const user = new User({
             email: email.toLowerCase(),
             password,
             name
         });
         await user.save();
-
-        // Return success response (no token, no cookie)
         return NextResponse.json({
             success: true,
             message: 'Account created successfully. Please sign in.',
