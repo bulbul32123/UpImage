@@ -7,8 +7,8 @@ import Job from '../../models/Job';
 
 export const config = {
   api: {
-    bodyParser: false, // we use formidable
-    sizeLimit: '10mb', // increase to something safe for your images
+    bodyParser: false, 
+    sizeLimit: '10mb',
   },
 };
 
@@ -50,38 +50,24 @@ async function uploadToCloudinary(filePath, publicIdPrefix = 'remove_bg_') {
 }
 
 async function pollForProcessedUrl(public_id, maxAttempts = 20, intervalMs = 1000) {
-  // polling Cloudinary resource metadata to detect processed PNG/updated version
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     try {
       const res = await cloudinary.v2.api.resource(public_id, { resource_type: 'image' });
-      // Cloudinary may overwrite or create a new version with .png extension / or provide background_removal result
-      // Many responses include metadata for background_removal or a new secure_url ending with .png
-      // Check if secure_url endsWith .png
       if (res?.secure_url && res.secure_url.toLowerCase().endsWith('.png')) {
         return { processedUrl: res.secure_url, meta: res };
       }
-
-      // Alternatively, some Cloudinary setups create a derived asset in eager transformations:
-      // Check for 'derived' assets
       if (res?.derived && res.derived.length) {
         const pngDerived = res.derived.find(d => d.secure_url && d.secure_url.endsWith('.png'));
         if (pngDerived) return { processedUrl: pngDerived.secure_url, meta: res };
       }
-
-      // Also sometimes the upload response gives background_removal object; check resource details
       if (res?.background_removal && res.background_removal?.status === 'complete' && res.background_removal?.result?.secure_url) {
         return { processedUrl: res.background_removal.result.secure_url, meta: res };
       }
 
     } catch (err) {
-      // resource may not be ready yet -> ignore and retry
-      // But if error is 404, we still want to retry
     }
-    // wait
     await new Promise(r => setTimeout(r, intervalMs));
   }
-
-  // after max attempts return null
   return null;
 }
 
@@ -98,25 +84,17 @@ export default async function handler(req, res) {
     if (!fileKey) return res.status(400).json({ error: 'No file uploaded' });
 
     const file = files[fileKey];
-    const filePath = file.filepath || file.path || file.path; // depending on formidable version
-
-    // Save initial job
+    const filePath = file.filepath || file.path || file.path; 
     const job = new Job({
       originalUrl: null,
       status: 'processing',
     });
     await job.save();
-
-    // Upload to Cloudinary with background_removal
     const uploadResult = await uploadToCloudinary(filePath);
-
-    // Save original info in job
     job.originalPublicId = uploadResult.public_id;
     job.originalUrl = uploadResult.secure_url;
     await job.save();
-
-    // Poll for processed PNG (background removed)
-    const poll = await pollForProcessedUrl(uploadResult.public_id, 25, 1000); // ~25s max
+    const poll = await pollForProcessedUrl(uploadResult.public_id, 25, 1000);
     if (!poll) {
       job.status = 'failed';
       job.cloudinaryResult = { uploadResult };
@@ -128,8 +106,6 @@ export default async function handler(req, res) {
     job.status = 'done';
     job.cloudinaryResult = poll.meta;
     await job.save();
-
-    // clean temp file
     try { fs.unlinkSync(filePath); } catch (e) { }
 
     return res.status(200).json({
