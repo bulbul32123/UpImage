@@ -1,8 +1,6 @@
 // app/api/upload/route.js
 import { NextResponse } from 'next/server';
 import { v2 as cloudinary } from 'cloudinary';
-
-// Configure Cloudinary
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -19,8 +17,6 @@ export async function POST(request) {
         { status: 400 }
       );
     }
-
-    // Convert file to base64
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     const base64 = buffer.toString('base64');
