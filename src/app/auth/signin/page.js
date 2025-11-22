@@ -21,9 +21,9 @@ export default function SigninPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const data = await signIn(formData); // use context signIn
+      const data = await signIn(formData); 
       if (data.success) {
-        router.push('/'); // redirect home
+        router.push('/'); 
       } else {
         setError(data.message);
       }
