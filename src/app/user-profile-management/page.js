@@ -9,7 +9,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useProfileUpdate } from "@/hooks/useProfileUpdate";
 
 const Account = () => {
-  const { user, loading, formData } = useAuth();
+  const { loading, formData } = useAuth();
   const {
     localFormData,
     uiState,
@@ -52,7 +52,6 @@ const Account = () => {
 
   return (
     <div className="col-span-2 lg:col-span-3">
-      {/* Header */}
       <div className="pb-6">
         <div className="bg-card rounded-lg p-6 border border-border shadow-resting">
           <div className="flex items-center space-x-3">
@@ -70,8 +69,6 @@ const Account = () => {
           </div>
         </div>
       </div>
-
-      {/* Messages */}
       {uiState.success && (
         <div className="mb-4 bg-green-50 border border-green-200 rounded-lg p-4 flex items-start space-x-3 animate-in fade-in">
           <Icon name="CheckCircle" size={20} color="green" />
@@ -85,8 +82,6 @@ const Account = () => {
           <p className="text-sm text-red-800">{uiState.error}</p>
         </div>
       )}
-
-      {/* Profile Picture Section */}
       <ProfilePictureSection
         localFormData={localFormData}
         uiState={uiState}
@@ -95,8 +90,6 @@ const Account = () => {
         triggerFileInput={triggerFileInput}
         loading={loading}
       />
-
-      {/* Personal Information */}
       <PersonalInfoSection
         localFormData={localFormData}
         uiState={uiState}
@@ -107,8 +100,6 @@ const Account = () => {
         isFormChanged={isFormChanged}
         loading={loading}
       />
-
-      {/* Notification Preferences */}
       <NotificationsSection
         notifications={notifications}
         handleNotificationChange={handleNotificationChange}
@@ -315,10 +306,6 @@ const NotificationsSection = React.memo(
 );
 
 NotificationsSection.displayName = "NotificationsSection";
-
-// ============================================================================
-// SKELETON LOADER
-// ============================================================================
 const AccountSkeleton = () => (
   <div className="col-span-2 lg:col-span-3">
     <div className="pb-6">
