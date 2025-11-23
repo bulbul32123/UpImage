@@ -7,6 +7,3 @@ export default function ImageTools() {
         </div>
     )
 }
-
-
-// Focus On Authentication and subscription model 
