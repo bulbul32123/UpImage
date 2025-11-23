@@ -21,7 +21,6 @@ const FileConverter = () => {
     icon: 'File'
   });
 
-  // Default quick actions
   const defaultQuickActions = [
     { label: 'PNG to JPG', from: 'png', to: 'jpg', icon: 'File' },
     { label: 'JPG to PNG', from: 'jpg', to: 'png', icon: 'File' },
@@ -29,16 +28,12 @@ const FileConverter = () => {
     { label: 'PNG to JPEG', from: 'png', to: 'jpeg', icon: 'File' },
     { label: 'JPG to WEBP', from: 'jpg', to: 'webp', icon: 'File' }
   ];
-
-  // Load custom quick actions from localStorage on component mount
   useEffect(() => {
     const saved = localStorage.getItem('customQuickActions');
     if (saved) {
       setCustomQuickActions(JSON.parse(saved));
     }
   }, []);
-
-  // Save custom quick actions to localStorage
   useEffect(() => {
     localStorage.setItem('customQuickActions', JSON.stringify(customQuickActions));
   }, [customQuickActions]);
@@ -58,13 +53,10 @@ const FileConverter = () => {
 
 
   const handleQuickActionClick = (action) => {
-    // Check if there are files uploaded
     if (selectedFiles.length === 0) {
       alert('Please upload files first before selecting a quick action.');
       return;
     }
-
-    // Filter files that match the source format
     const matchingFiles = selectedFiles.filter(file => {
       const fileExtension = file.extension?.replace('.', '').toLowerCase();
       return fileExtension === action.from.toLowerCase();
@@ -74,17 +66,12 @@ const FileConverter = () => {
       alert(`No ${action.from.toUpperCase()} files found. This quick action converts ${action.from.toUpperCase()} to ${action.to.toUpperCase()}.`);
       return;
     }
-
-    // Apply the conversion settings
     setSourceFormat(action.from);
     setTargetFormat(action.to);
-
-    // Show success message
     const message = matchingFiles.length === 1
       ? `Applied ${action.label} conversion to 1 matching file.`
       : `Applied ${action.label} conversion to ${matchingFiles.length} matching files.`;
 
-    // You could replace this with a toast notification
     setTimeout(() => {
       alert(message);
     }, 100);
@@ -100,8 +87,6 @@ const FileConverter = () => {
       alert('Source and target formats must be different.');
       return;
     }
-
-    // Check for duplicates
     const allActions = [...defaultQuickActions, ...customQuickActions];
     const isDuplicate = allActions.some(action =>
       action.from === newQuickAction.from && action.to === newQuickAction.to
@@ -141,7 +126,6 @@ const FileConverter = () => {
       <div className="bg-card border-b border-border shadow-resting">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            {/* Breadcrumb */}
             <nav className="flex items-center space-x-2 text-sm">
               <Link
                 href="/dashboard-overview"
