@@ -7,6 +7,7 @@ import RecentActivityCard from '../../components/dashboard-overview/RecentActivi
 import RecentFilesCard from '../../components/dashboard-overview/RecentFilesCard';
 import UsageAnalyticsCard from '../../components/dashboard-overview/UsageAnalyticsCard';
 import Icon from '../../components/AppIcon';
+import SubscriptionWidget from '@/components/SubscriptionWidget';
 
 
 const DashboardOverview = () => {
@@ -23,26 +24,26 @@ const DashboardOverview = () => {
   });
 
   const [tools] = useState([
-    // {
-    //   title: 'Image Processing Tools',
-    //   description: 'Background removal, enhancement, composition, and format conversion with AI-powered precision',
-    //   path: '/image-processing-tools',
-    //   icon: 'Image',
-    //   color: 'bg-accent',
-    //   status: 'active',
-    //   stats: {
-    //     count: '1,234',
-    //     label: 'Images Processed'
-    //   },
-    //   features: [
-    //     'AI Background Removal',
-    //     'Image Enhancement',
-    //     'Format Conversion',
-    //     'Batch Processing',
-    //     'Quality Optimization',
-    //     'Watermark Removal'
-    //   ]
-    // },
+    {
+      title: 'Image Processing Tools',
+      description: 'Background removal, enhancement, composition, and format conversion with AI-powered precision',
+      path: '/image-processing-tools',
+      icon: 'Image',
+      color: 'bg-accent',
+      status: 'active',
+      stats: {
+        count: '1,234',
+        label: 'Images Processed'
+      },
+      features: [
+        'AI Background Removal',
+        'Image Enhancement',
+        'Format Conversion',
+        'Batch Processing',
+        'Quality Optimization',
+        'Watermark Removal'
+      ]
+    },
     {
       title: 'PDF Management Hub',
       description: 'Chat with PDFs, summarization, and comprehensive file management with intelligent document analysis',
@@ -226,19 +227,16 @@ const DashboardOverview = () => {
     <div className="min-h-screen bg-background">
       <div className="pt-20 pb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Welcome Banner */}
-          {/* <WelcomeBanner user={user} /> */}
-
-          {/* Tool Cards Grid */}
+          <WelcomeBanner user={user} />
+             <SubscriptionWidget />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {tools?.map((tool, index) => (
               <ToolCard key={index} tool={tool} />
             ))}
           </div>
 
-          {/* Stats and Activity Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-            {/* <QuickStatsCard 
+            <QuickStatsCard 
               title="Quick Stats" 
               stats={quickStats}
               className="lg:col-span-1"
@@ -246,7 +244,7 @@ const DashboardOverview = () => {
             <RecentActivityCard 
               activities={recentActivity}
               className="lg:col-span-2"
-            /> */}
+            />
           </div>
 
           {/* Files and Analytics Grid */}
