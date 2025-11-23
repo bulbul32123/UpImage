@@ -17,38 +17,36 @@ const PDFManagementHub = () => {
   const [generatedSummaries, setGeneratedSummaries] = useState([]);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Mock initial files for demonstration
   useEffect(() => {
     const mockFiles = [
       {
         id: 'file-1',
         name: 'Business_Proposal_2024.pdf',
-        size: 2457600, // 2.4 MB
+        size: 2457600, 
         type: 'application/pdf',
-        uploadedAt: new Date(Date.now() - 3600000), // 1 hour ago
+        uploadedAt: new Date(Date.now() - 3600000), 
         processed: true
       },
       {
         id: 'file-2',
         name: 'Financial_Report_Q4.pdf',
-        size: 1843200, // 1.8 MB
+        size: 1843200, 
         type: 'application/pdf',
-        uploadedAt: new Date(Date.now() - 7200000), // 2 hours ago
+        uploadedAt: new Date(Date.now() - 7200000),
         processed: true
       },
       {
         id: 'file-3',
         name: 'Project_Documentation.pdf',
-        size: 3276800, // 3.2 MB
+        size: 3276800, 
         type: 'application/pdf',
-        uploadedAt: new Date(Date.now() - 86400000), // 1 day ago
+        uploadedAt: new Date(Date.now() - 86400000),
         processed: false
       }
     ];
     setUploadedFiles(mockFiles);
   }, []);
 
-  // Check for mobile viewport
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 1024);
@@ -66,7 +64,6 @@ const PDFManagementHub = () => {
     }));
     setUploadedFiles(prev => [...processedFiles, ...prev]);
     
-    // Auto-select first uploaded file
     if (newFiles?.length > 0 && !selectedFile) {
       setSelectedFile(newFiles?.[0]);
       if (isMobile) {
@@ -96,7 +93,6 @@ const PDFManagementHub = () => {
 
   const renderDesktopLayout = () => (
     <div className="flex h-full">
-      {/* File Upload Panel - Left */}
       <div className="w-80 flex-shrink-0">
         <FileUploadPanel
           onFileUpload={handleFileUpload}
@@ -104,20 +100,14 @@ const PDFManagementHub = () => {
           onFileSelect={handleFileSelect}
         />
       </div>
-
-      {/* Main Content Area - Center */}
       <div className="flex-1 flex">
-        {/* Chat Interface */}
         <div className="flex-1 min-w-0">
           <ChatInterface
             selectedFile={selectedFile}
             onSendMessage={handleSendMessage}
           />
         </div>
-
-        {/* Right Panel - Preview/Summary */}
         <div className="w-96 flex-shrink-0 flex flex-col">
-          {/* Panel Tabs */}
           <div className="flex border-b border-border bg-card">
             <button
               onClick={() => setActivePanel('preview')}
@@ -145,8 +135,6 @@ const PDFManagementHub = () => {
               </div>
             </button>
           </div>
-
-          {/* Panel Content */}
           <div className="flex-1">
             {activePanel === 'preview' ? (
               <DocumentPreview selectedFile={selectedFile} onClose={() => setActivePanel('summary')} />
@@ -164,7 +152,6 @@ const PDFManagementHub = () => {
 
   const renderMobileLayout = () => (
     <div className="flex flex-col h-full pb-16">
-      {/* Mobile Navigation */}
       <MobileNavigation
         activePanel={activePanel}
         onPanelChange={handlePanelChange}
@@ -172,8 +159,6 @@ const PDFManagementHub = () => {
         hasMessages={chatMessages?.length > 0}
         hasSummary={generatedSummaries?.length > 0}
       />
-
-      {/* Panel Content */}
       <div className="flex-1 overflow-hidden">
         {activePanel === 'upload' && (
           <FileUploadPanel
@@ -203,11 +188,9 @@ const PDFManagementHub = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
       <div className="bg-card border-b border-border shadow-resting">
         <div className="px-4 lg:px-6 py-4">
           <div className="flex items-center justify-between">
-            {/* Breadcrumb */}
             <div className="flex items-center space-x-2 text-sm">
               <Link 
                 href="/dashboard-overview" 
@@ -218,8 +201,6 @@ const PDFManagementHub = () => {
               <Icon name="ChevronRight" size={16} color="var(--color-muted-foreground)" />
               <span className="text-foreground font-medium">PDF Tools</span>
             </div>
-
-            {/* Actions */}
             <div className="flex items-center space-x-2">
               <Button
                 variant="outline"
@@ -239,8 +220,6 @@ const PDFManagementHub = () => {
               </Button>
             </div>
           </div>
-
-          {/* Title Section */}
           <div className="mt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -252,8 +231,6 @@ const PDFManagementHub = () => {
                   Get instant insights and manage your documents efficiently.
                 </p>
               </div>
-              
-              {/* Stats */}
               <div className="hidden lg:flex items-center space-x-6">
                 <div className="text-center">
                   <div className="text-2xl font-semibold text-foreground">{uploadedFiles?.length}</div>
@@ -272,11 +249,9 @@ const PDFManagementHub = () => {
           </div>
         </div>
       </div>
-      {/* Main Content */}
       <div className="flex-1" style={{ height: 'calc(100vh - 140px)' }}>
         {isMobile ? renderMobileLayout() : renderDesktopLayout()}
       </div>
-      {/* Processing Status Toast */}
       {uploadedFiles?.some(file => !file?.processed) && (
         <div className="fixed bottom-4 right-4 z-50 bg-card border border-border rounded-lg shadow-floating p-4 max-w-sm">
           <div className="flex items-start space-x-3">
