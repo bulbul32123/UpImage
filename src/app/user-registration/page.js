@@ -10,12 +10,9 @@ import Icon from '../../components/AppIcon';
 const UserRegistration = () => {
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
       <RegistrationHeader />
-      {/* Main Content */}
       <main className="flex-1 py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md mx-auto">
-          {/* Welcome Section */}
           <div className="text-center mb-8">
             <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
               <Icon name="UserPlus" size={32} color="var(--color-primary)" />
@@ -27,23 +24,15 @@ const UserRegistration = () => {
               Join thousands of users who trust ToolSuite Pro for their file processing needs
             </p>
           </div>
-
-          {/* Registration Form Card */}
           <div className="bg-card rounded-lg shadow-resting border border-border p-6 sm:p-8 mb-6">
             <RegistrationForm />
           </div>
-
-          {/* Social Registration */}
           <div className="bg-card rounded-lg shadow-resting border border-border p-6 sm:p-8 mb-6">
             <SocialRegistration />
           </div>
-
-          {/* Trust Signals */}
           <div className="mb-6">
             <TrustSignals />
           </div>
-
-          {/* Sign In Link */}
           <div className="text-center">
             <p className="text-sm text-muted-foreground">
               Already have an account?{' '}
@@ -57,7 +46,6 @@ const UserRegistration = () => {
           </div>
         </div>
       </main>
-      {/* Footer */}
       <footer className="bg-card border-t border-border py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
