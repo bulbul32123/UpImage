@@ -90,7 +90,6 @@ const Security = () => {
         }
 
         setIsChangingPassword(true);
-        // Simulate API call
         await new Promise(resolve => setTimeout(resolve, 2000));
         setIsChangingPassword(false);
         setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
@@ -187,7 +186,6 @@ const Security = () => {
                     </div>
                 </div>
             </div>
-            {/* Password Change */}
             <div className="bg-card rounded-lg p-6 border border-border shadow-resting">
                 <h3 className="text-lg font-semibold text-foreground mb-6">Change Password</h3>
 
@@ -230,7 +228,6 @@ const Security = () => {
                     </div>
                 </form>
             </div>
-            {/* Two-Factor Authentication */}
             <div className="bg-card rounded-lg p-6 border border-border shadow-resting">
                 <div className="flex items-center justify-between mb-6">
                     <div>
@@ -330,7 +327,6 @@ const Security = () => {
                     </div>
                 )}
             </div>
-            {/* Active Sessions */}
             <div className="bg-card rounded-lg p-6 border border-border shadow-resting">
                 <div className="flex items-center justify-between mb-6">
                     <h3 className="text-lg font-semibold text-foreground">Active Sessions</h3>
@@ -380,7 +376,6 @@ const Security = () => {
                     ))}
                 </div>
             </div>
-            {/* Security Events */}
             <div className="bg-card rounded-lg p-6 border border-border shadow-resting">
                 <div className="flex items-center justify-between mb-6">
                     <h3 className="text-lg font-semibold text-foreground">Recent Security Events</h3>
@@ -411,7 +406,6 @@ const Security = () => {
                     ))}
                 </div>
             </div>
-            {/* Account Deletion */}
             <div className="bg-card rounded-lg p-6 border border-error/20 shadow-resting">
                 <div className="flex items-start space-x-3">
                     <div className="w-10 h-10 bg-error/10 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -432,7 +426,6 @@ const Security = () => {
                     </div>
                 </div>
             </div>
-            {/* Delete Account Modal */}
             {showDeleteModal && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
                     <div className="bg-card rounded-lg p-6 max-w-md w-full border border-border shadow-floating">
