@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
 import Icon from '@/components/AppIcon';
 import Button from '@/components/ui/Button';
-import { tabs } from '@/utils/data';
 
 const UserAnalytics = () => {
     const [selectedPeriod, setSelectedPeriod] = useState('30days');
@@ -22,7 +21,6 @@ const UserAnalytics = () => {
         { value: 'processing', label: 'Processing Time', icon: 'Clock' }
     ];
 
-    // Mock data for charts
     const monthlyUsageData = [
         { month: 'Jan', images: 120, pdfs: 45, conversions: 30, storage: 2.1 },
         { month: 'Feb', images: 150, pdfs: 60, conversions: 40, storage: 2.8 },
@@ -68,7 +66,6 @@ const UserAnalytics = () => {
     };
 
     const exportData = () => {
-        // Mock export functionality
         console.log('Exporting usage data...');
     };
 
@@ -139,7 +136,6 @@ const UserAnalytics = () => {
                     </div>
                 </div>
             </div>
-            {/* Key Metrics */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
                 <div className="bg-card rounded-lg p-4 border border-border shadow-resting">
                     <div className="flex items-center justify-between mb-2">
@@ -195,9 +191,7 @@ const UserAnalytics = () => {
                     <p className="text-xs text-muted-foreground">Cost Savings</p>
                 </div>
             </div>
-            {/* Charts Row */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Monthly Usage Trend */}
                 <div className="bg-card rounded-lg p-6 border border-border shadow-resting">
                     <div className="flex items-center justify-between mb-6">
                         <h4 className="text-base font-semibold text-foreground">Monthly Usage Trend</h4>
@@ -256,8 +250,6 @@ const UserAnalytics = () => {
                         </ResponsiveContainer>
                     </div>
                 </div>
-
-                {/* File Type Distribution */}
                 <div className="bg-card rounded-lg p-6 border border-border shadow-resting">
                     <h4 className="text-base font-semibold text-foreground mb-6">Usage by Tool Type</h4>
 
@@ -298,9 +290,7 @@ const UserAnalytics = () => {
                     </div>
                 </div>
             </div>
-            {/* Daily Activity & Top Tools */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Daily Activity */}
                 <div className="bg-card rounded-lg p-6 border border-border shadow-resting">
                     <h4 className="text-base font-semibold text-foreground mb-6">Daily Activity (This Week)</h4>
 
@@ -327,8 +317,6 @@ const UserAnalytics = () => {
                         </ResponsiveContainer>
                     </div>
                 </div>
-
-                {/* Top Tools */}
                 <div className="bg-card rounded-lg p-6 border border-border shadow-resting">
                     <h4 className="text-base font-semibold text-foreground mb-6">Most Used Tools</h4>
 
@@ -359,7 +347,6 @@ const UserAnalytics = () => {
                     </div>
                 </div>
             </div>
-            {/* Usage Insights */}
             <div className="bg-card rounded-lg p-6 border border-border shadow-resting">
                 <h4 className="text-base font-semibold text-foreground mb-6">Usage Insights</h4>
 
