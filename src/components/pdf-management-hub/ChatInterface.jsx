@@ -11,7 +11,6 @@ const ChatInterface = ({ selectedFile, onSendMessage }) => {
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
-  // Mock conversation data
   const mockConversations = {
     'file-1': [
       {
