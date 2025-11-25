@@ -16,7 +16,6 @@ const AccountDetailsTab = ({ user: initialUser }) => {
     profileImage: ''
   });
 
-
   const [notifications, setNotifications] = useState({
     emailUpdates: true,
     smsAlerts: false,
@@ -131,7 +130,6 @@ const AccountDetailsTab = ({ user: initialUser }) => {
       setIsSaving(false);
     }
   };
-
 
   const handleCancel = () => {
     if (initialUser) {
