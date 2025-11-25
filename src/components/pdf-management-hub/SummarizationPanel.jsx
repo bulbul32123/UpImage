@@ -43,7 +43,7 @@ const SummarizationPanel = ({ selectedFile, onGenerateSummary }) => {
       };
       
       setGeneratedSummary(summary);
-      setSummaryHistory(prev => [summary, ...prev?.slice(0, 4)]); // Keep last 5
+      setSummaryHistory(prev => [summary, ...prev?.slice(0, 4)]);
       setIsGenerating(false);
       onGenerateSummary?.(summary);
     }, 3000);
