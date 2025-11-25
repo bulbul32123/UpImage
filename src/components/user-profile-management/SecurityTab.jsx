@@ -115,13 +115,11 @@ const SecurityTab = () => {
   };
 
   const handleTerminateSession = (sessionId) => {
-    console.log('Terminating session:', sessionId);
     alert('Session terminated successfully');
   };
 
   const handleDeleteAccount = () => {
     if (deleteConfirmation === 'DELETE') {
-      console.log('Account deletion requested');
       alert('Account deletion request submitted. You will receive a confirmation email.');
       setShowDeleteModal(false);
       setDeleteConfirmation('');
