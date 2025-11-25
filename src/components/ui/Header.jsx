@@ -11,7 +11,7 @@ const Header = () => {
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [imageError, setImageError] = useState(false);
   const { user, formData, signOut, loading } = useAuth();
-  const tempUserPlan = true;
+  
 
   const navigationItems = useMemo(
     () => [
@@ -22,7 +22,7 @@ const Header = () => {
     ],
     []
   );
-
+  const UserPlan = formData.plan
   const profileMenuItems = useMemo(
     () => [
       { label: "Profile Settings", path: "/user-profile-management", icon: "User" },
@@ -64,9 +64,9 @@ const Header = () => {
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
             <Icon name="Wrench" size={20} color="white" />
           </div>
-          <span className="text-xl font-semibold text-foreground hidden md:block">
-            ToolSuite Pro
-          </span>
+          <div className="text-xl font-semibold text-foreground hidden md:block">
+            UpImage 
+          </div>
         </Link>
 
         <nav className="hidden md:flex items-center space-x-1">
@@ -121,8 +121,12 @@ const Header = () => {
                     </span>
                   </div>
                 )}
-                {tempUserPlan && (
-                  <span className="bg-[#ECFF79] border select-none text-black text-[9px] px-2 py-0.5 rounded-full shadow-sm">
+                {UserPlan === 'basic' ? (
+                  <span className="bg-[#c5f40c] border select-none text-black text-[12px] font-semibold px-2 py-0.5 rounded-full shadow-sm">
+                    BASIC
+                  </span>
+                ) : UserPlan === 'pro' && (
+                  <span className="bg-[#ECFF79] border select-none text-black text-[12px] font-semibold px-2 py-0.5 rounded-full shadow-sm">
                     PRO
                   </span>
                 )}
