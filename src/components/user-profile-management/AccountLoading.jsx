@@ -11,7 +11,6 @@ const AccountLoading = () => (
                 </div>
             </div>
         </div>
-
         <div className="bg-card rounded-lg p-6 border border-border shadow-resting mb-4">
             <div className="h-6 w-32 bg-gray-200 rounded-md animate-pulse mb-4" />
             <div className="flex items-center space-x-4">
@@ -22,7 +21,6 @@ const AccountLoading = () => (
                 </div>
             </div>
         </div>
-
         <div className="bg-card rounded-lg p-6 border border-border shadow-resting mb-4">
             <div className="h-6 w-32 bg-gray-200 rounded-md animate-pulse mb-6" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
