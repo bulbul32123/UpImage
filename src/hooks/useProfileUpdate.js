@@ -18,7 +18,6 @@ export const useProfileUpdate = (initialFormData) => {
   const tempFileRef = useRef(null);
   const messageTimeoutRef = useRef();
 
-  // Sync local form data with context
   useEffect(() => {
     setLocalFormData({
       name: formData.name,
@@ -28,7 +27,6 @@ export const useProfileUpdate = (initialFormData) => {
     });
   }, [formData]);
 
-  // Auto-clear messages
   useEffect(() => {
     if (uiState.success || uiState.error) {
       messageTimeoutRef.current = setTimeout(() => {
@@ -112,7 +110,6 @@ export const useProfileUpdate = (initialFormData) => {
     try {
       let finalProfileImage = localFormData.profileImage;
 
-      // Upload image if changed
       if (tempFileRef.current && localFormData.profileImage.startsWith("blob:")) {
         setUiState((prev) => ({ ...prev, isUploadingImage: true }));
         finalProfileImage = await uploadImageToCloudinary(
@@ -129,7 +126,6 @@ export const useProfileUpdate = (initialFormData) => {
         tempFileRef.current = null;
       }
 
-      // Update profile
       const result = await updateProfile({
         name: localFormData.name,
         email: localFormData.email,
