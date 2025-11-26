@@ -12,7 +12,9 @@ export default function UserSideBar() {
     const { user, formData, loading } = useAuth();
     const [imageError, setImageError] = useState(false);
     const basePath = "/user-profile-management";
-    const tempUserPlan = true;
+    const UserPlan = formData.plan
+    console.log(formData);
+    
 
     const memoizedTabs = useMemo(() => tabs, []);
 
@@ -61,7 +63,7 @@ export default function UserSideBar() {
                                 priority
                             />
                         ) : (
-                            <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                            <div className="w-full h-full bg-black rounded-full flex items-center justify-center">
                                 <span className="text-white text-sm font-semibold">
                                     {getUserInitials()}
                                 </span>
@@ -72,10 +74,18 @@ export default function UserSideBar() {
                         <h2 className="text-lg font-semibold text-foreground">
                             {user?.name}
                         </h2>
-                        {tempUserPlan && (
+                        {UserPlan === 'basic' ? (
+                            <span className="bg-[#c5f40c] border select-none text-black text-[12px] font-semibold px-2 py-0.5 rounded-full shadow-sm">
+                                BASIC PLAN
+                            </span>
+                        ) : UserPlan === 'pro' ? (
                             <span className="bg-[#ECFF79] border select-none text-black text-[12px] font-semibold px-2 py-0.5 rounded-full shadow-sm">
                                 PRO PLAN
                             </span>
+                        ): (
+                            <span className="select-none text-black text-[12px] font-bold rounded-full shadow-sm">
+                            Free plan
+                        </span>
                         )}
                     </div>
                 </div>
