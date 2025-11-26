@@ -19,6 +19,7 @@ export const AuthProvider = ({ children }) => {
         name: "",
         email: "",
         profileImage: "",
+        plan: ''
     });
 
     const uploadAbortControllerRef = useRef(null);
@@ -26,18 +27,21 @@ export const AuthProvider = ({ children }) => {
     const fetchUser = useCallback(async () => {
         try {
             const { data } = await api.get("/auth/me");
+            console.log(data);
+
             if (data.success) {
                 setUser(data.user);
                 setFormData({
                     name: data.user.name || "",
                     email: data.user.email || "",
                     profileImage: data.user.profileImage || "",
+                    plan: data.user.plan || ''
                 });
             }
         } catch (err) {
             console.error("Fetch user error:", err);
             setUser(null);
-            setFormData({ name: "", email: "", profileImage: "" });
+            setFormData({ name: "", email: "", profileImage: "", plan: "" });
         } finally {
             setLoading(false);
         }
@@ -57,8 +61,9 @@ export const AuthProvider = ({ children }) => {
                         name: data.user.name || "",
                         email: data.user.email || "",
                         profileImage: data.user.profileImage || "",
+                         plan: data.user.plan || ''
                     });
-                    
+
                     setTimeout(() => {
                         fetchUser();
                     }, 100);
@@ -76,7 +81,7 @@ export const AuthProvider = ({ children }) => {
         try {
             await api.post("/auth/signout");
             setUser(null);
-            setFormData({ name: "", email: "", profileImage: "" });
+            setFormData({ name: "", email: "", profileImage: "", plan: '' });
             router.push("/auth/signin");
         } catch (error) {
             console.error("Sign out error:", error);
@@ -143,6 +148,7 @@ export const AuthProvider = ({ children }) => {
                         name: response.data.user.name || "",
                         email: response.data.user.email || "",
                         profileImage: response.data.user.profileImage || "",
+                        plan: response.data.user.plan || ""
                     });
                     return { success: true };
                 }
