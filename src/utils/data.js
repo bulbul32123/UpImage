@@ -20,3 +20,15 @@ export const tabs = [
         icon: "Shield",
     },
 ];
+
+
+src/app/api/stripe/
+src/app/api/subscription/
+src/app/api/user/usage-history/
+src/app/pricing/
+src/components/SubscriptionWidget.js
+
+src/components/UpgradeModal.js
+src/lib/migrateUsers.js
+src/lib/stripe.js
+src/lib/tokenMiddleware.js
