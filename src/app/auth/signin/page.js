@@ -15,8 +15,7 @@ export default function SigninPage() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setError('');
-  };
-
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
