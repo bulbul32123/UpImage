@@ -375,9 +375,7 @@ const FileConverter = () => {
   );
 };
 
-export default FileConverter;
-
-
+export default FileConverter
 
 // { label: 'PNG to JPG', from: 'png', to: 'jpg', icon: 'File' },
 // { label: 'PNG to JPEG', from: 'png', to: 'jpeg', icon: 'File' },
@@ -419,3 +417,8 @@ export default FileConverter;
                   availableFormats={['docx', 'pdf', 'txt', 'doc', 'rtf', 'odt', 'html']}
                 />
               </div> */}
+
+
+
+
+
