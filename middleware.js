@@ -42,4 +42,3 @@ export const config = {
     '/auth/:path*'
   ]
 };
-
