@@ -9,7 +9,6 @@ const DocumentPreview = ({ selectedFile, onClose }) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   const totalPages = 12;
-  const mockPdfUrl = "https://images.unsplash.com/photo-1568667256549-094345857637?w=800&h=1000&fit=crop";
 
   const handleZoomIn = () => {
     setZoomLevel(prev => Math.min(prev + 25, 200));
