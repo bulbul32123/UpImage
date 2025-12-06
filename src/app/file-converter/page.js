@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Icon from '../../components/AppIcon';
 import FileUploadZone from '../../components/file-converter/FileUploadZone';
-import FormatSelector from '../../components/file-converter/FormatSelector';
 import ConversionQueue from '../../components/file-converter/ConversionQueue';
 import ConversionHistory from '../../components/file-converter/ConversionHistory';
 
@@ -46,12 +45,9 @@ const FileConverter = () => {
       setSourceFormat(firstFileExtension);
     }
   };
-
   const handleRemoveFile = (fileId) => {
     setSelectedFiles(prev => prev?.filter(file => file?.id !== fileId));
   };
-
-
   const handleQuickActionClick = (action) => {
     if (selectedFiles.length === 0) {
       alert('Please upload files first before selecting a quick action.');
@@ -61,7 +57,6 @@ const FileConverter = () => {
       const fileExtension = file.extension?.replace('.', '').toLowerCase();
       return fileExtension === action.from.toLowerCase();
     });
-
     if (matchingFiles.length === 0) {
       alert(`No ${action.from.toUpperCase()} files found. This quick action converts ${action.from.toUpperCase()} to ${action.to.toUpperCase()}.`);
       return;
@@ -71,18 +66,15 @@ const FileConverter = () => {
     const message = matchingFiles.length === 1
       ? `Applied ${action.label} conversion to 1 matching file.`
       : `Applied ${action.label} conversion to ${matchingFiles.length} matching files.`;
-
     setTimeout(() => {
       alert(message);
     }, 100);
   };
-
   const handleAddQuickAction = () => {
     if (!newQuickAction.label || !newQuickAction.from || !newQuickAction.to) {
       alert('Please fill in all fields.');
       return;
     }
-
     if (newQuickAction.from === newQuickAction.to) {
       alert('Source and target formats must be different.');
       return;
@@ -96,7 +88,6 @@ const FileConverter = () => {
       alert('This conversion already exists in your quick actions.');
       return;
     }
-
     setCustomQuickActions(prev => [...prev, { ...newQuickAction }]);
     setNewQuickAction({ label: '', from: '', to: '', icon: 'File' });
     setShowAddQuickAction(false);
