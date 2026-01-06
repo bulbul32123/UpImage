@@ -11,7 +11,7 @@ const Header = () => {
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [imageError, setImageError] = useState(false);
   const { user, formData, signOut, loading } = useAuth();
-  
+
 
   const navigationItems = useMemo(
     () => [
@@ -19,6 +19,7 @@ const Header = () => {
       { label: "Image Tools", path: "/image-tools", icon: "Image" },
       { label: "PDF Tools", path: "/pdf-management-hub", icon: "FileText" },
       { label: "File Converter", path: "/file-converter", icon: "RefreshCw" },
+      { label: "Bg Remover", path: "/image-tools/bg-remover", icon: "RefreshCw" },
     ],
     []
   );
@@ -65,7 +66,7 @@ const Header = () => {
             <Icon name="Wrench" size={20} color="white" />
           </div>
           <div className="text-xl font-semibold text-foreground hidden md:block">
-            UpImage 
+            UpImage
           </div>
         </Link>
 
