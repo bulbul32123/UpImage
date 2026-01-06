@@ -1,15 +1,11 @@
 import { v2 as cloudinary } from 'cloudinary';
 
-// Configure Cloudinary
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-/**
- * Upload PDF to Cloudinary
- */
 export async function uploadPDFToCloudinary(file, userId) {
   try {
     const bytes = await file.arrayBuffer();
@@ -36,9 +32,6 @@ export async function uploadPDFToCloudinary(file, userId) {
   }
 }
 
-/**
- * Extract text from PDF buffer
- */
 export async function extractTextFromPDF(buffer) {
   try {
     const pdfParse = require("pdf-parse");
@@ -52,9 +45,6 @@ export async function extractTextFromPDF(buffer) {
   }
 }
 
-/**
- * Chunk text for AI processing
- */
 export function chunkText(text, chunkSize = 1000, overlap = 200) {
   const chunks = [];
   let start = 0;
@@ -67,7 +57,7 @@ export function chunkText(text, chunkSize = 1000, overlap = 200) {
     chunks.push({
       content: chunk.trim(),
       chunkIndex: chunkIndex++,
-      pageNumber: Math.floor(chunkIndex / 2) + 1 // Approximate
+      pageNumber: Math.floor(chunkIndex / 2) + 1 
     });
 
     start += chunkSize - overlap;
@@ -76,9 +66,6 @@ export function chunkText(text, chunkSize = 1000, overlap = 200) {
   return chunks;
 }
 
-/**
- * Find relevant chunks for a query (simple keyword matching)
- */
 export function findRelevantChunks(query, chunks, maxChunks = 3) {
   const queryWords = query.toLowerCase().split(/\s+/);
 
@@ -97,9 +84,6 @@ export function findRelevantChunks(query, chunks, maxChunks = 3) {
     .slice(0, maxChunks);
 }
 
-/**
- * Delete PDF from Cloudinary
- */
 export async function deletePDFFromCloudinary(publicId) {
   try {
     await cloudinary.uploader.destroy(publicId, { resource_type: 'raw' });
@@ -107,8 +91,3 @@ export async function deletePDFFromCloudinary(publicId) {
     console.error('Cloudinary deletion error:', error);
   }
 }
-
-
-
-
-src/models/Summary.js
