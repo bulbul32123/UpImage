@@ -6,13 +6,13 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-i
 const JWT_EXPIRE = '7d';
 const COOKIE_NAME = 'auth_token';
 
-export function generateToken(userId){
+export function generateToken(userId) {
   return jwt.sign({ userId }, JWT_SECRET, {
     expiresIn: JWT_EXPIRE
   });
 }
 
-export function verifyToken(token){
+export function verifyToken(token) {
   try {
     const decoded = jwt.verify(token, JWT_SECRET)
     return { userId: decoded.userId };
@@ -21,7 +21,7 @@ export function verifyToken(token){
     return null;
   }
 }
-export async function setAuthCookie(token){
+export async function setAuthCookie(token) {
   const cookieStore = await cookies();
 
   cookieStore.set({
@@ -30,7 +30,7 @@ export async function setAuthCookie(token){
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
-    maxAge: 60 * 60 * 24 * 7, 
+    maxAge: 60 * 60 * 24 * 7,
     path: '/'
   });
 }
@@ -77,19 +77,20 @@ export async function verifyAuth(request) {
   }
 }
 
-export async function getCurrentUser(){
+export async function getCurrentUser() {
   try {
     const token = await getAuthCookie();
-    
+
     if (!token) {
       return null;
     }
 
     const decoded = verifyToken(token);
-    
+
     if (!decoded) {
       return null;
     }
+    console.log('decoded', decoded);
 
     return decoded;
   } catch (error) {
@@ -98,7 +99,7 @@ export async function getCurrentUser(){
   }
 }
 
-export function validatePassword(password){
+export function validatePassword(password) {
   const minLength = 8;
   const hasUpperCase = /[A-Z]/.test(password);
   const hasLowerCase = /[a-z]/.test(password);
@@ -128,12 +129,12 @@ export function validatePassword(password){
     errors
   };
 }
-export function validateEmail(email){
+export function validateEmail(email) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 }
 
-export async function hashPassword(password){
+export async function hashPassword(password) {
   const encoder = new TextEncoder();
   const data = encoder.encode(password);
   const hashBuffer = await crypto.subtle.digest('SHA-256', data);
@@ -142,13 +143,13 @@ export async function hashPassword(password){
   return hashHex;
 }
 
-export async function comparePassword(password, hash){
-  
+export async function comparePassword(password, hash) {
+
   const hashedPassword = await hashPassword(password);
   return hashedPassword === hash;
 }
 
-export async function refreshAuthToken(){
+export async function refreshAuthToken() {
   try {
     const token = await getAuthCookie();
 
