@@ -20,8 +20,6 @@ export async function POST(request) {
         { status: 400 }
       );
     }
-
-    // Validate file type and size
     if (file.type !== 'application/pdf') {
       return NextResponse.json(
         { error: 'Only PDF files are allowed' },
@@ -36,18 +34,13 @@ export async function POST(request) {
       );
     }
 
-    // Upload to Cloudinary
     const uploadResult = await uploadPDFToCloudinary(file, userId);
 
-    // Extract text from PDF
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     const { text, pageCount } = await extractTextFromPDF(buffer);
 
-    // Chunk the text
     const chunks = chunkText(text);
-
-    // Save to database
     const pdfDocument = new PDFDocument({
       userId,
       filename: uploadResult.public_id.split('/').pop(),
