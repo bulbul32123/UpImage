@@ -18,54 +18,62 @@ const PDFManagementHub = () => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const mockFiles = [
-      {
-        id: 'file-1',
-        name: 'Business_Proposal_2024.pdf',
-        size: 2457600, 
-        type: 'application/pdf',
-        uploadedAt: new Date(Date.now() - 3600000), 
-        processed: true
-      },
-      {
-        id: 'file-2',
-        name: 'Financial_Report_Q4.pdf',
-        size: 1843200, 
-        type: 'application/pdf',
-        uploadedAt: new Date(Date.now() - 7200000),
-        processed: true
-      },
-      {
-        id: 'file-3',
-        name: 'Project_Documentation.pdf',
-        size: 3276800, 
-        type: 'application/pdf',
-        uploadedAt: new Date(Date.now() - 86400000),
-        processed: false
-      }
-    ];
-    setUploadedFiles(mockFiles);
+    loadPDFHistory();
   }, []);
+
+  const loadPDFHistory = async () => {
+    try {
+      const response = await fetch('/api/pdf/history');
+      const data = await response.json();
+
+      if (data.success) {
+        setUploadedFiles(data.documents);
+      }
+    } catch (error) {
+      console.error('Failed to load PDF history:', error);
+    }
+  };
 
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 1024);
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const handleFileUpload = (newFiles) => {
-    const processedFiles = newFiles?.map(file => ({
-      ...file,
-      processed: false
-    }));
-    setUploadedFiles(prev => [...processedFiles, ...prev]);
-    
-    if (newFiles?.length > 0 && !selectedFile) {
-      setSelectedFile(newFiles?.[0]);
+  const handleFileUpload = async (newFiles) => {
+    const uploadPromises = newFiles.map(async (file) => {
+      const formData = new FormData();
+      formData.append('file', file.file);
+
+      try {
+        const response = await fetch('/api/pdf/upload', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          return data.document;
+        }
+        throw new Error(data.error);
+      } catch (error) {
+        console.error('Upload failed:', error);
+        return null;
+      }
+    });
+
+    const uploadedDocs = await Promise.all(uploadPromises);
+    const successfulUploads = uploadedDocs.filter(doc => doc !== null);
+
+    setUploadedFiles(prev => [...successfulUploads, ...prev]);
+
+    if (successfulUploads.length > 0 && !selectedFile) {
+      setSelectedFile(successfulUploads[0]);
       if (isMobile) {
         setActivePanel('preview');
       }
@@ -111,9 +119,8 @@ const PDFManagementHub = () => {
           <div className="flex border-b border-border bg-card">
             <button
               onClick={() => setActivePanel('preview')}
-              className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
-                activePanel === 'preview' ?'text-primary border-b-2 border-primary bg-primary/5' :'text-muted-foreground hover:text-foreground hover:bg-muted/50'
-              }`}
+              className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${activePanel === 'preview' ? 'text-primary border-b-2 border-primary bg-primary/5' : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                }`}
             >
               <div className="flex items-center justify-center space-x-2">
                 <Icon name="Eye" size={16} />
@@ -122,9 +129,8 @@ const PDFManagementHub = () => {
             </button>
             <button
               onClick={() => setActivePanel('summary')}
-              className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
-                activePanel === 'summary' ?'text-primary border-b-2 border-primary bg-primary/5' :'text-muted-foreground hover:text-foreground hover:bg-muted/50'
-              }`}
+              className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${activePanel === 'summary' ? 'text-primary border-b-2 border-primary bg-primary/5' : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                }`}
             >
               <div className="flex items-center justify-center space-x-2">
                 <Icon name="FileText" size={16} />
@@ -192,8 +198,8 @@ const PDFManagementHub = () => {
         <div className="px-4 lg:px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2 text-sm">
-              <Link 
-                href="/dashboard-overview" 
+              <Link
+                href="/dashboard-overview"
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
                 Dashboard
@@ -227,7 +233,7 @@ const PDFManagementHub = () => {
                   PDF Management Hub
                 </h1>
                 <p className="text-muted-foreground max-w-2xl">
-                  Upload, chat with, and summarize your PDF documents using AI-powered tools. 
+                  Upload, chat with, and summarize your PDF documents using AI-powered tools.
                   Get instant insights and manage your documents efficiently.
                 </p>
               </div>
