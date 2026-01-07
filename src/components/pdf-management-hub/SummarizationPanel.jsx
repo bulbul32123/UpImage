@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Icon from '../../components/AppIcon';
 import Button from '../../components/ui/Button';
 import Select from '../../components/ui/Select';
@@ -9,7 +9,29 @@ const SummarizationPanel = ({ selectedFile, onGenerateSummary }) => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedSummary, setGeneratedSummary] = useState(null);
   const [summaryHistory, setSummaryHistory] = useState([]);
+  useEffect(() => {
+    if (selectedFile?.id) {
+      loadSummaryHistory();
+    }
+  }, [selectedFile]);
 
+  const loadSummaryHistory = async () => {
+    if (!selectedFile?.id) return;
+
+    try {
+      const response = await fetch(`/api/summary/${selectedFile.id}`);
+      const data = await response.json();
+
+      if (data.success) {
+        setSummaryHistory(data.summaries);
+        if (data.summaries.length > 0) {
+          setGeneratedSummary(data.summaries[0]);
+        }
+      }
+    } catch (error) {
+      console.error('Failed to load summaries:', error);
+    }
+  };
   const summaryOptions = [
     { value: 'brief', label: 'Brief Summary', description: '2-3 sentences overview' },
     { value: 'detailed', label: 'Detailed Summary', description: 'Comprehensive analysis' },
@@ -17,43 +39,37 @@ const SummarizationPanel = ({ selectedFile, onGenerateSummary }) => {
     { value: 'executive', label: 'Executive Summary', description: 'Business-focused overview' }
   ];
 
-  const mockSummaries = {
-    brief: `This business proposal outlines the implementation of an AI-powered customer service solution designed to enhance customer satisfaction while reducing operational costs. The proposed system will integrate seamlessly with existing infrastructure and provide 24/7 support capabilities. The project has an estimated ROI of 285% over three years with a break-even point at month 14.`,
-    
-    detailed: `**Executive Summary**\nThis comprehensive business proposal presents a strategic initiative to implement an AI-powered customer service solution that addresses current operational challenges while positioning the company for future growth.\n\n**Current State Analysis**\nThe organization currently faces several customer service challenges including high volumes of repetitive inquiries, limited support hours, increasing operational costs, and inconsistent response quality across different agents.\n\n**Proposed Solution**\nThe recommended AI chatbot system will handle 80% of common customer inquiries automatically, with seamless escalation to human agents for complex issues. The system includes natural language processing, machine learning capabilities, and integration with existing CRM systems.\n\n**Financial Projections**\nImplementation costs total $84,000 with projected savings of $78,000 in year one, $95,000 in year two, and $112,000 in year three. The break-even point is projected at month 14 with a three-year ROI of 285%.\n\n**Implementation Timeline**\nThe project will be executed in three phases over 6 months, including system setup, integration, testing, and staff training.`,
-    
-    'key-points': `**Key Implementation Points:**\n• AI chatbot will handle 80% of common customer inquiries\n• 24/7 customer support availability\n• Seamless escalation to human agents for complex issues\n• Integration with existing CRM systems\n\n**Financial Highlights:**\n• Total implementation cost: $84,000\n• Year 1 savings: $78,000\n• Year 2 savings: $95,000\n• Year 3 savings: $112,000\n• Break-even: Month 14\n• 3-year ROI: 285%\n\n**Timeline:**\n• Phase 1: System setup (2 months)\n• Phase 2: Integration & testing (2 months)\n• Phase 3: Training & deployment (2 months)\n\n**Expected Benefits:**\n• Reduced operational costs\n• Improved customer satisfaction\n• Consistent response quality\n• Scalable support infrastructure`,
-    
-    executive: `**Strategic Overview**\nThis proposal presents a transformative opportunity to revolutionize our customer service operations through AI implementation, delivering significant cost savings and enhanced customer experience.\n\n**Business Case**\nWith customer service costs rising 15% annually and customer satisfaction scores plateauing, immediate action is required. The proposed AI solution addresses these challenges while positioning us as an industry leader in customer service innovation.\n\n**Investment & Returns**\nThe $84,000 investment will generate $285,000 in savings over three years, representing a 285% ROI. Break-even occurs at month 14, with positive cash flow thereafter.\n\n**Strategic Advantages**\n• Market differentiation through superior customer service\n• Operational efficiency gains of 40%\n• Scalability to support business growth\n• Data-driven insights for continuous improvement\n\n**Recommendation**\nImmediate approval is recommended to capitalize on competitive advantages and realize substantial cost savings. The 6-month implementation timeline ensures rapid value delivery with minimal business disruption.`
-  };
-
   const handleGenerateSummary = async () => {
-    if (!selectedFile) return;
+    if (!selectedFile?.id) return;
 
     setIsGenerating(true);
-    
-    setTimeout(() => {
-      const summary = {
-        id: Date.now(),
-        type: summaryType,
-        content: mockSummaries?.[summaryType],
-        fileName: selectedFile?.name,
-        generatedAt: new Date(),
-        wordCount: mockSummaries?.[summaryType]?.split(' ')?.length
-      };
-      
-      setGeneratedSummary(summary);
-      setSummaryHistory(prev => [summary, ...prev?.slice(0, 4)]);
+
+    try {
+      const response = await fetch(`/api/summary/${selectedFile.id}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: summaryType })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setGeneratedSummary(data.summary);
+        setSummaryHistory(prev => [data.summary, ...prev.slice(0, 4)]);
+        onGenerateSummary?.(data.summary);
+      }
+    } catch (error) {
+      console.error('Failed to generate summary:', error);
+    } finally {
       setIsGenerating(false);
-      onGenerateSummary?.(summary);
-    }, 3000);
+    }
   };
 
   const handleExportSummary = (format) => {
     if (!generatedSummary) return;
-    
+
     console.log(`Exporting summary as ${format}:`, generatedSummary);
-    
+
     const content = `Summary of ${generatedSummary?.fileName}\n\nGenerated: ${generatedSummary?.generatedAt?.toLocaleString()}\nType: ${summaryOptions?.find(opt => opt?.value === generatedSummary?.type)?.label}\n\n${generatedSummary?.content}`;
     const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
