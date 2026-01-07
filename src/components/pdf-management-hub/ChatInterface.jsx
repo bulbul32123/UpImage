@@ -6,10 +6,31 @@ import Input from '../../components/ui/Input';
 
 const ChatInterface = ({ selectedFile, onSendMessage }) => {
   const [messages, setMessages] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+  useEffect(() => {
+    if (selectedFile?.id) {
+      loadChatHistory();
+    }
+  }, [selectedFile]);
+
+  const loadChatHistory = async () => {
+    if (!selectedFile?.id) return;
+
+    try {
+      const response = await fetch(`/api/chat/${selectedFile.id}`);
+      const data = await response.json();
+
+      if (data.success) {
+        setMessages(data.messages);
+      }
+    } catch (error) {
+      console.error('Failed to load chat history:', error);
+    }
+  };
 
   const mockConversations = {
     'file-1': [
@@ -65,38 +86,43 @@ const ChatInterface = ({ selectedFile, onSendMessage }) => {
   };
 
   const handleSendMessage = async (message = inputMessage) => {
-    if (!message?.trim() || !selectedFile) return;
+    if (!message?.trim() || !selectedFile || isLoading) return;
 
-    const userMessage = {
+    setIsLoading(true);
+    const tempUserMsg = {
       id: Date.now(),
       type: 'user',
-      content: message?.trim(),
+      content: message.trim(),
       timestamp: new Date()
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    setMessages(prev => [...prev, tempUserMsg]);
     setInputMessage('');
     setIsTyping(true);
 
-    setTimeout(() => {
-      const responses = [
-        `Based on the PDF content, I can help you with that. Let me analyze the relevant sections and provide you with a detailed response.\n\nThe document contains information that directly addresses your question about "${message?.trim()}".`,
-        `I've found several relevant sections in the PDF that relate to your query. Here's what I discovered:\n\n• Key insight 1 from page 3\n• Important detail from page 7\n• Supporting data from page 12\n\nWould you like me to elaborate on any of these points?`,
-        `Great question! After reviewing the PDF, I can provide you with the following information:\n\nThe document discusses this topic in detail, particularly in the sections covering implementation strategies and best practices.`,
-        `I've analyzed the PDF content related to your question. Here are the main findings:\n\n1. Primary consideration: Cost-effectiveness\n2. Secondary factor: Implementation timeline\n3. Risk assessment: Minimal disruption expected\n\nThis information is primarily found in the executive summary and recommendations section.`
-      ];
+    try {
+      const response = await fetch(`/api/chat/${selectedFile.id}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: message.trim() })
+      });
 
-      const assistantMessage = {
-        id: Date.now() + 1,
-        type: 'assistant',
-        content: responses?.[Math.floor(Math.random() * responses?.length)],
-        timestamp: new Date()
-      };
+      const data = await response.json();
 
-      setMessages(prev => [...prev, assistantMessage]);
+      if (data.success) {
+        setMessages(prev => [
+          ...prev.filter(m => m.id !== tempUserMsg.id),
+          data.userMessage,
+          data.assistantMessage
+        ]);
+        onSendMessage?.(data.userMessage, data.assistantMessage);
+      }
+    } catch (error) {
+      console.error('Failed to send message:', error);
+    } finally {
       setIsTyping(false);
-      onSendMessage?.(userMessage, assistantMessage);
-    }, 2000 + Math.random() * 1000);
+      setIsLoading(false);
+    }
   };
 
   const handleQuickQuestion = (question) => {
@@ -188,26 +214,22 @@ const ChatInterface = ({ selectedFile, onSendMessage }) => {
                 key={message?.id}
                 className={`flex ${message?.type === 'user' ? 'justify-end' : 'justify-start'}`}
               >
-                <div className={`flex items-start space-x-2 max-w-[80%] ${
-                  message?.type === 'user' ? 'flex-row-reverse space-x-reverse' : ''
-                }`}>
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                    message?.type === 'user' ?'bg-primary text-primary-foreground' :'bg-secondary text-secondary-foreground'
+                <div className={`flex items-start space-x-2 max-w-[80%] ${message?.type === 'user' ? 'flex-row-reverse space-x-reverse' : ''
                   }`}>
-                    <Icon 
-                      name={message?.type === 'user' ? 'User' : 'Bot'} 
-                      size={16} 
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${message?.type === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground'
+                    }`}>
+                    <Icon
+                      name={message?.type === 'user' ? 'User' : 'Bot'}
+                      size={16}
                     />
                   </div>
-                  <div className={`rounded-lg p-3 ${
-                    message?.type === 'user' ?'bg-primary text-primary-foreground' :'bg-muted text-foreground'
-                  }`}>
+                  <div className={`rounded-lg p-3 ${message?.type === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted text-foreground'
+                    }`}>
                     <div className="whitespace-pre-wrap text-sm leading-relaxed">
                       {message?.content}
                     </div>
-                    <div className={`text-xs mt-2 opacity-70 ${
-                      message?.type === 'user' ? 'text-primary-foreground' : 'text-muted-foreground'
-                    }`}>
+                    <div className={`text-xs mt-2 opacity-70 ${message?.type === 'user' ? 'text-primary-foreground' : 'text-muted-foreground'
+                      }`}>
                       {formatTime(message?.timestamp)}
                     </div>
                   </div>
